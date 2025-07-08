@@ -47,7 +47,7 @@ const HeroSection = () => {
             />
             <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center text-white px-4 text-center">
               <h1 className="text-2xl text-pink-500 md:text-4xl font-bold mb-2">{slide.title}</h1>
-              <p className="text-sm text-blue-500 md:text-lg">{slide.description}</p>
+              <p className="text-sm text-white md:text-lg">{slide.description}</p>
             </div>
           </div>
         ))}
