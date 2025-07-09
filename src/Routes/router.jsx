@@ -11,6 +11,7 @@ import DashboardLayout from "../Dashboard/DashboardLayout";
 import AddCompa from "../Pages/AddDonationCampaign";
 import AddDonationCampaign from "../Pages/AddDonationCampaign";
 import PetListing from "../Pages/PetListing";
+import PetDetails from "../Pages/PetDetails";
 
 export const router = createBrowserRouter([
  
@@ -26,6 +27,11 @@ export const router = createBrowserRouter([
     path:'petlisting',
     Component: PetListing
 },
+ { path: "/pets/:id",
+      Component:PetDetails,
+      loader: ({ params }) => fetch(`http://localhost:3000/pets/${params.id}`)
+
+    },
 
 ]
   },

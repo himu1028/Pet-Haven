@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router';
 
 const PetListing = () => {
   const [pets, setPets] = useState([]);
@@ -53,9 +54,9 @@ const PetListing = () => {
             <h3 className="text-xl font-semibold mt-3">{pet.petName}</h3>
             <p className="text-sm text-gray-600">Age: {pet.petAge}</p>
             <p className="text-sm text-gray-600 mb-3">Location: {pet.petLocation}</p>
-            <button className="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            <Link to={`/pets/${pet._id}`} className="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
               View Details
-            </button>
+            </Link >
           </div>
         ))}
       </div>
