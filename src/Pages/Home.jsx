@@ -7,6 +7,7 @@ import Query from './Query';
 import Review from './Review';
 import { useLocation } from 'react-router';
 import AOS from 'aos';
+import PetCategories from './PetCategories';
 const Home = () => {
             const location = useLocation();
            
@@ -17,6 +18,9 @@ const Home = () => {
         <div className="space-y-10">
       <div data-aos="fade-up">
         <HeroSection />
+      </div>
+      <div data-aos="fade-up">
+        <PetCategories></PetCategories>
       </div>
       <div data-aos="fade-up">
         <About />

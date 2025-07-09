@@ -8,6 +8,8 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import Addpet from "../Pages/Addpet";
 import DashboardLayout from "../Dashboard/DashboardLayout";
+import AddCompa from "../Pages/AddDonationCampaign";
+import AddDonationCampaign from "../Pages/AddDonationCampaign";
 
 export const router = createBrowserRouter([
  
@@ -47,6 +49,10 @@ export const router = createBrowserRouter([
       {
         path:'dashboard/addPet',
         Component:Addpet,
+      },
+      {
+        path:'dashboard/addCompa',
+        Component:AddDonationCampaign,
       },
      
     ]
