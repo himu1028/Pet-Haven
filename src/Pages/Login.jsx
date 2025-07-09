@@ -1,9 +1,22 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import useAuth from '../Hooks/useAuth';
 
 const Login = () => {
 const {register,handleSubmit,formState: { errors }}=useForm();
+  const {googleSignIn}= useAuth();
+ const navigate = useNavigate()
+const handleGoogle = () =>{
+  googleSignIn()
+  .then(result =>{
+  console.log(result)
+   navigate("/");
+})
+.catch(error =>{
+  console.log(error)
+})
+}
 
 const onSubmit = data => {
   console.log(data)
@@ -68,7 +81,7 @@ const onSubmit = data => {
       {/* Google Login Button */}
       <button
         type="button"
-        onClick={() => console.log('Google Login')}
+        onClick={handleGoogle}
         className="w-full flex items-center justify-center gap-3 border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition"
       >
         <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-5 w-5" />

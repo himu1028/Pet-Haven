@@ -1,12 +1,53 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
+import useAuth from '../Hooks/useAuth';
+import Swal from 'sweetalert2';
 
 const Register = () => {
+    const navigate = useNavigate()
+    const {createUser,googleSignIn}= useAuth();
 const {register,handleSubmit,formState: { errors }}=useForm();
+
+
+
+const handleGoogle = () =>{
+  googleSignIn()
+  .then(result =>{
+  console.log(result)
+   navigate("/");
+})
+.catch(error =>{
+  console.log(error)
+})
+}
 
 const onSubmit = data => {
   console.log(data)
+   // Create user
+  createUser(data.email, data.password)
+.then((userCredential)=>{
+  const user = userCredential.user;
+
+})
+
+    .then((result) => {
+      Swal.fire({
+        position: "top-end",
+        icon: "success",
+        title: "You Have Successfully Registered",
+        showConfirmButton: false,
+        timer: 1500,
+        timerProgressBar: true,
+      }).then(() => {
+        navigate("/");
+      });
+      console.log(result);
+    })
+    .catch((error) => {
+       Swal.fire("please try again !");
+      console.log(error);
+    });
 }
 
     return (
@@ -80,7 +121,7 @@ const onSubmit = data => {
       {/* Google Login Button */}
       <button
         type="button"
-        onClick={() => console.log('Google Login')}
+        onClick={handleGoogle}
         className="w-full flex items-center justify-center gap-3 border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition"
       >
         <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-5 w-5" />
