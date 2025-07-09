@@ -11,7 +11,7 @@ const Navbar = () => {
 const navigate = useNavigate();
   const links = [
     { name: 'Home', path: '/' },
-    { name: 'Pet Listing', path: '/about' },
+    { name: 'Pet Listing', path: '/petlisting' },
     { name: 'Donation Campaigns', path: '/services' },
     { name: 'Contact', path: '/contact' },
   ];

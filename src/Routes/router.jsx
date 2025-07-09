@@ -10,6 +10,7 @@ import Addpet from "../Pages/Addpet";
 import DashboardLayout from "../Dashboard/DashboardLayout";
 import AddCompa from "../Pages/AddDonationCampaign";
 import AddDonationCampaign from "../Pages/AddDonationCampaign";
+import PetListing from "../Pages/PetListing";
 
 export const router = createBrowserRouter([
  
@@ -20,6 +21,10 @@ export const router = createBrowserRouter([
 {
     index: true,
     Component: Home
+},
+{
+    path:'petlisting',
+    Component: PetListing
 },
 
 ]
