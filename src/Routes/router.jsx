@@ -6,8 +6,11 @@ import Home from "../Pages/Home";
 import AuthLayout from "../Layouts/AuthLayout";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
+import Addpet from "../Pages/Addpet";
+import DashboardLayout from "../Dashboard/DashboardLayout";
 
 export const router = createBrowserRouter([
+ 
   {
     path: "/",
     Component: RootLayout,
@@ -17,8 +20,7 @@ export const router = createBrowserRouter([
     Component: Home
 },
 
-    
-    ]
+]
   },
 
 // for auth
@@ -33,7 +35,22 @@ export const router = createBrowserRouter([
       {
         path:'register',
         Component:Register,
-      }
+      },
     ]
-  }
+  },
+
+// dash
+  {
+    path: '/dashboard',
+    Component:DashboardLayout,
+    children:[
+      {
+        path:'dashboard/addPet',
+        Component:Addpet,
+      },
+     
+    ]
+  },
+
+  
 ]);

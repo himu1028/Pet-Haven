@@ -2,10 +2,11 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router';
 import useAuth from '../Hooks/useAuth';
+import Swal from 'sweetalert2';
 
 const Login = () => {
 const {register,handleSubmit,formState: { errors }}=useForm();
-  const {googleSignIn}= useAuth();
+  const {googleSignIn,SignInUser}= useAuth();
  const navigate = useNavigate()
 const handleGoogle = () =>{
   googleSignIn()
@@ -19,7 +20,18 @@ const handleGoogle = () =>{
 }
 
 const onSubmit = data => {
-  console.log(data)
+  // Create user
+SignInUser(data.email,data.password)
+.then(result =>{
+  Swal.fire("You Have Successfully Log In !");
+  navigate("/");
+    
+  console.log(result)
+})
+.catch(error =>{
+  Swal.fire("Email or Password is incorrrect !");
+  console.log(error)
+})
 }
 
     return (
