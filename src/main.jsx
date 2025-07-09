@@ -10,6 +10,7 @@ import {
 import { router } from './Routes/router.jsx';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import AuthProvider from './AuthContext/AuthProvider.jsx';
 
 // AOS.init();
 
@@ -40,6 +41,8 @@ AOS.init({
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </StrictMode>,
 )
