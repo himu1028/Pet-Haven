@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 
 const DonationCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
@@ -23,9 +24,9 @@ const DonationCampaigns = () => {
             <h2 className="text-xl font-semibold">{campaign.petName}</h2>
             <p className="text-sm text-gray-600">Max Donation: ${campaign.maxDonation}</p>
             <p className="text-sm text-gray-600 mb-4">Donated: ${campaign.donatedAmount}</p>
-            <button className="mt-auto bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+            <Link to={`/donationCompaigns/${campaign._id}`} className="mt-auto bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
               View Details
-            </button>
+            </Link>
           </div>
         ))}
       </div>

@@ -13,6 +13,7 @@ import AddDonationCampaign from "../Pages/AddDonationCampaign";
 import PetListing from "../Pages/PetListing";
 import PetDetails from "../Pages/PetDetails";
 import DonationCampaigns from "../Pages/DonationCampaigns";
+import CompaignsDetails from "../Pages/CompaignsDetails";
 
 export const router = createBrowserRouter([
  
@@ -35,6 +36,11 @@ export const router = createBrowserRouter([
  { path: "/pets/:id",
       Component:PetDetails,
       loader: ({ params }) => fetch(`http://localhost:3000/pets/${params.id}`)
+
+    },
+ { path: "/donationCompaigns/:id",
+      Component:CompaignsDetails,
+      loader: ({ params }) => fetch(`http://localhost:3000/donationCompaigns/${params.id}`)
 
     },
 
