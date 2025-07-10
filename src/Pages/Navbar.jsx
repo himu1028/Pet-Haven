@@ -12,7 +12,7 @@ const navigate = useNavigate();
   const links = [
     { name: 'Home', path: '/' },
     { name: 'Pet Listing', path: '/petlisting' },
-    { name: 'Donation Campaigns', path: '/services' },
+    { name: 'Donation Campaigns', path: '/donationcompaigns' },
     { name: 'Contact', path: '/contact' },
   ];
 

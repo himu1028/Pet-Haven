@@ -66,7 +66,7 @@ const Addpet = () => {
     };
 
     try {
-      const res = await axios.post('http://localhost:5000/pets', petData);
+      const res = await axios.post('http://localhost:3000/pets', petData);
       alert('Pet added successfully!');
       reset();
       setImageUrl('');
