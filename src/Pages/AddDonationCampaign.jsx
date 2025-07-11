@@ -24,7 +24,7 @@ const AddDonationCampaign = () => {
 
     try {
       const res = await axios.post(
-        `https://api.imgbb.com/1/upload?key=your_imgbb_api_key`, // Replace this
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`, 
         formData
       );
       setImageUrl(res.data.data.url);
@@ -44,15 +44,20 @@ const AddDonationCampaign = () => {
 
     const campaignData = {
       petImage: imageUrl,
-      maxAmount: data.maxAmount,
+      petName: data.petName,
+      location: data.location,
+      contactEmail: data.contactEmail,
+      organizerName: data.organizer,
+      
+maxDonation: data.maxAmount,
       lastDate: data.lastDate,
       shortDesc: data.shortDesc,
-      longDesc: data.longDesc,
+      description: data.longDesc,
       createdAt: new Date().toISOString(),
     };
 
     try {
-      await axios.post('http://localhost:5000/donations', campaignData);
+      await axios.post('http://localhost:3000/donationCompaigns', campaignData);
       alert('Donation campaign added successfully!');
       reset();
       setImageUrl('');
@@ -76,6 +81,51 @@ const AddDonationCampaign = () => {
           {imageUrl && <img src={imageUrl} alt="Pet" className="w-32 mt-2 rounded" />}
         </div>
 
+        {/* 🐶 Pet Name */}
+        <div>
+          <label className="block font-medium">Pet Name</label>
+          <input
+            {...register('petName', { required: 'Required' })}
+            placeholder="e.g. Lucky"
+            className="w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.petName && <p className="text-red-500 text-sm">{errors.petName.message}</p>}
+        </div>
+
+        {/* 📍 Location */}
+        <div>
+          <label className="block font-medium">Location</label>
+          <input
+            {...register('location', { required: 'Required' })}
+            placeholder="e.g. Dhaka, Bangladesh"
+            className="w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.location && <p className="text-red-500 text-sm">{errors.location.message}</p>}
+        </div>
+
+        {/* 📧 Contact Email */}
+        <div>
+          <label className="block font-medium">Contact Email</label>
+          <input
+            type="email"
+            {...register('contactEmail', { required: 'Required' })}
+            placeholder="e.g. you@example.com"
+            className="w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.contactEmail && <p className="text-red-500 text-sm">{errors.contactEmail.message}</p>}
+        </div>
+
+        {/* 👤 Organizer Name */}
+        <div>
+          <label className="block font-medium">Organizer Name</label>
+          <input
+            {...register('organizer', { required: 'Required' })}
+            placeholder="e.g. John Doe"
+            className="w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+          />
+          {errors.organizer && <p className="text-red-500 text-sm">{errors.organizer.message}</p>}
+        </div>
+
         {/* 💸 Max Donation Amount */}
         <div>
           <label className="block font-medium">Maximum Donation Amount</label>
@@ -83,11 +133,9 @@ const AddDonationCampaign = () => {
             type="number"
             {...register('maxAmount', { required: 'Required' })}
             placeholder="e.g. 5000"
-            className="w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           />
-          {errors.maxAmount && (
-            <p className="text-red-500 text-sm mt-1">{errors.maxAmount.message}</p>
-          )}
+          {errors.maxAmount && <p className="text-red-500 text-sm">{errors.maxAmount.message}</p>}
         </div>
 
         {/* 📅 Last Date */}
@@ -96,11 +144,9 @@ const AddDonationCampaign = () => {
           <input
             type="date"
             {...register('lastDate', { required: 'Required' })}
-            className="w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           />
-          {errors.lastDate && (
-            <p className="text-red-500 text-sm mt-1">{errors.lastDate.message}</p>
-          )}
+          {errors.lastDate && <p className="text-red-500 text-sm">{errors.lastDate.message}</p>}
         </div>
 
         {/* 📜 Short Description */}
@@ -109,11 +155,9 @@ const AddDonationCampaign = () => {
           <input
             {...register('shortDesc', { required: 'Required' })}
             placeholder="Short note..."
-            className="w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           />
-          {errors.shortDesc && (
-            <p className="text-red-500 text-sm mt-1">{errors.shortDesc.message}</p>
-          )}
+          {errors.shortDesc && <p className="text-red-500 text-sm">{errors.shortDesc.message}</p>}
         </div>
 
         {/* 📄 Long Description */}
@@ -122,11 +166,9 @@ const AddDonationCampaign = () => {
           <textarea
             {...register('longDesc', { required: 'Required' })}
             placeholder="Detailed info..."
-            className="w-full h-28 px-4 py-2 border-2 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full h-28 px-4 py-2 border-2 border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
           />
-          {errors.longDesc && (
-            <p className="text-red-500 text-sm mt-1">{errors.longDesc.message}</p>
-          )}
+          {errors.longDesc && <p className="text-red-500 text-sm">{errors.longDesc.message}</p>}
         </div>
 
         {/* 🚀 Submit */}
