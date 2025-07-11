@@ -14,6 +14,7 @@ import PetListing from "../Pages/PetListing";
 import PetDetails from "../Pages/PetDetails";
 import DonationCampaigns from "../Pages/DonationCampaigns";
 import CompaignsDetails from "../Pages/CompaignsDetails";
+import MyPets from "../Pages/Mypets";
 
 export const router = createBrowserRouter([
  
@@ -73,8 +74,8 @@ export const router = createBrowserRouter([
         Component:Addpet,
       },
       {
-        path:'dashboard/addCompa',
-        Component:AddDonationCampaign,
+        path:'dashboard/mypets',
+        Component:MyPets,
       },
      
     ]

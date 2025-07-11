@@ -8,7 +8,7 @@ const DashboardLayout = () => {
   const menuItems = [
     { name: 'Home', path: '/dashboard' },
     { name: 'Add A Pet', path: 'dashboard/addPet' },
-    { name: 'My Added Pets ', path: '/dashboard/orders' },
+    { name: 'My Added Pets ', path: 'dashboard/mypets' },
     { name: 'Adoption Request', path: '/dashboard/settings' },
     { name: 'Create Compaigns', path: 'dashboard/addCompa' },
     { name: 'My Donation Compaigns', path: 'dashboard/addPet' },
