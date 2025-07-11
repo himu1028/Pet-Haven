@@ -9,7 +9,7 @@ import {
   createColumnHelper,
 } from "@tanstack/react-table";
 import Modal from "react-modal";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 
 Modal.setAppElement("#root");
@@ -20,7 +20,7 @@ const MyPets = () => {
   const [sorting, setSorting] = useState([]);
   const [deleteId, setDeleteId] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const navigate = useNavigate();
+ console.log(pets._id)
 
   // Load user pets
   useEffect(() => {
@@ -92,12 +92,12 @@ const MyPets = () => {
         header: "Actions",
         cell: ({ row }) => (
           <div className="space-x-2">
-            <button
-              onClick={() => navigate(`/update-pet/${row.original._id}`)}
-              className="bg-blue-500 text-white px-2 py-1 rounded"
-            >
-              Update
-            </button>
+            <Link
+  to={`/pets/${row.original._id}`}
+  className="bg-blue-500 text-white px-2 py-1 rounded inline-block"
+>
+  Update
+</Link>
             <button
               onClick={() => {
                 setDeleteId(row.original._id);
