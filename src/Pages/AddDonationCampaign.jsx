@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
+import useAuth from '../Hooks/useAuth';
 
 const AddDonationCampaign = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
-
+ const { user} = useAuth();
   const {
     register,
     handleSubmit,
@@ -46,7 +47,7 @@ const AddDonationCampaign = () => {
       petImage: imageUrl,
       petName: data.petName,
       location: data.location,
-      contactEmail: data.contactEmail,
+      contactEmail: user.email,
       organizerName: data.organizer,
       
 maxDonation: data.maxAmount,

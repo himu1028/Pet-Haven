@@ -43,7 +43,7 @@ const UpdateMyPets = () => {
 
     try {
       const res = await axios.post(
-        `https://api.imgbb.com/1/upload?key=your_imgbb_api_key`, // 🔑 change this
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`, // 🔑 change this
         formData
       );
       setImageUrl(res.data.data.url);

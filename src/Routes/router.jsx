@@ -16,6 +16,8 @@ import CompaignsDetails from "../Pages/CompaignsDetails";
 import MyPets from "../Pages/Mypets";
 import UpdateMyPets from "../Pages/UpdateMyPets";
 import AddDonationCampaign from "../Pages/AddDonationCampaign";
+import MyDonationCampaigns from "../Pages/MyDonationCampaigns";
+import UpdateMyCampaigns from "../Pages/UpdateMyCampaigns";
 
 export const router = createBrowserRouter([
  
@@ -40,6 +42,11 @@ export const router = createBrowserRouter([
         path:'/pets/:id',
         Component:UpdateMyPets,
         loader: ({ params }) => fetch(`http://localhost:3000/pets/${params.id}`)
+      },
+{
+        path:'/edit-donation/:id',
+        Component:UpdateMyCampaigns,
+        loader: ({ params }) => fetch(`http://localhost:3000/donationCompaigns/${params.id}`)
       },
  { path: "/pets/:id",
       Component:PetDetails,
@@ -87,6 +94,10 @@ export const router = createBrowserRouter([
       {
         path:'dashboard/adddonationscampaigns',
         Component:AddDonationCampaign,
+      },
+      {
+        path:'dashboard/mydonationcampaign',
+        Component:MyDonationCampaigns,
       },
       
      
