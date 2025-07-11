@@ -63,7 +63,7 @@ console.log(pet)
       <p className="text-lg text-gray-600 mt-2">{pet.shortDescription}</p>
       <div className="mt-4 text-gray-700 space-y-2">
         <p><strong>Age:</strong> {pet.petAge} years</p>
-        <p><strong>Category:</strong> {pet.petCategory}</p>
+        <p><strong>Category:</strong> {pet.petCategory?.value}</p>
         <p><strong>Location:</strong> {pet.petLocation}</p>
         <p><strong>Gender:</strong> {pet.gender}</p>
         <p><strong>Color:</strong> {pet.color}</p>

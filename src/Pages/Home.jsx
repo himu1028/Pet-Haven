@@ -23,11 +23,12 @@ const Home = () => {
         <PetCategories></PetCategories>
       </div>
       <div data-aos="fade-up">
-        <About />
-      </div>
-      <div data-aos="fade-up">
         <CallToAction />
       </div>
+      <div data-aos="fade-up">
+        <About />
+      </div>
+      
       <div data-aos="fade-up">
         <Query />
       </div>

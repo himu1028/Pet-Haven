@@ -3,12 +3,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import useAuth from '../Hooks/useAuth';
 import Swal from 'sweetalert2';
+import { FaDog } from 'react-icons/fa'; // 🐶 Dog Icon added
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const { user, signOutUser } = useAuth(); 
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const links = [
     { name: 'Home', path: '/' },
     { name: 'Pet Listing', path: '/petlisting' },
@@ -17,9 +19,9 @@ const navigate = useNavigate();
   ];
 
   const handleLogout = () => {
-     signOutUser().then(() => {
+    signOutUser().then(() => {
       navigate("/");
-      Swal.fire("Successfully Logout !");
+      Swal.fire("Successfully Logout!");
     });
     setDropdownOpen(false);
   };
@@ -27,9 +29,12 @@ const navigate = useNavigate();
   return (
     <nav className="bg-gray-300 max-w-8xl mx-auto shadow-md sticky top-0 z-50">
       <div className="max-w-8xl mx-auto px-4 py-3 flex justify-between items-center">
-        {/* Logo */}
-        <div className="text-2xl font-bold text-blue-600">
-          <Link to="/"><span className='text-4xl text-pink-500'>Pet</span><span>Adoption</span></Link>
+        {/* Logo with Dog Icon */}
+        <div className="text-2xl font-bold text-blue-600 flex items-center space-x-2">
+          <Link to="/" className="flex items-center space-x-1">
+            <FaDog className="text-pink-500" size={28} />
+            <span className="text-2xl font-bold">Adoption</span>
+          </Link>
         </div>
 
         {/* Desktop Links */}

@@ -6,10 +6,11 @@ const PetListing = () => {
   const [pets, setPets] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
-  console.log(pets)
+
+  console.log(pets);
 
   const fetchPets = async () => {
-    const res = await axios.get(`http://localhost:3000/pets`, {
+    const res = await axios.get('http://localhost:3000/pets', {
       params: { search, category },
     });
     setPets(res.data);
@@ -23,7 +24,9 @@ const PetListing = () => {
 
   return (
     <div className="max-w-7xl mx-auto py-10 px-4">
-      <h2 className="text-3xl font-bold mb-6 text-center">Available Pets for Adoption</h2>
+      <h2 className="text-3xl font-bold mb-6 text-center">
+        Available Pets for Adoption
+      </h2>
 
       {/* 🔍 Search & Filter */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6 justify-center">
@@ -41,7 +44,9 @@ const PetListing = () => {
         >
           <option value="">All Categories</option>
           {categories.filter(Boolean).map((cat) => (
-            <option key={cat} value={cat}>{cat}</option>
+            <option key={cat} value={cat}>
+              {cat}
+            </option>
           ))}
         </select>
       </div>
@@ -50,13 +55,22 @@ const PetListing = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {pets.map((pet) => (
           <div key={pet._id} className="bg-white rounded shadow p-4">
-            <img src={pet.petImage} alt={pet.petName} className="w-full h-48 object-cover rounded" />
+            <img
+              src={pet.petImage}
+              alt={pet.petName}
+              className="w-full h-48 object-cover rounded"
+            />
             <h3 className="text-xl font-semibold mt-3">{pet.petName}</h3>
             <p className="text-sm text-gray-600">Age: {pet.petAge}</p>
-            <p className="text-sm text-gray-600 mb-3">Location: {pet.petLocation}</p>
-            <Link to={`/pets/${pet._id}`} className="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            <p className="text-sm text-gray-600 mb-3">
+              Location: {pet.petLocation}
+            </p>
+            <Link
+              to={`/pets/${pet._id}`}
+              className="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
               View Details
-            </Link >
+            </Link>
           </div>
         ))}
       </div>

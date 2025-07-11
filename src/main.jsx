@@ -1,9 +1,9 @@
 import 'flowbite'; 
 import 'flowbite/dist/flowbite.min.css';
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App.jsx';
 import {
   RouterProvider,
 } from "react-router";
@@ -12,7 +12,13 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import AuthProvider from './AuthContext/AuthProvider.jsx';
 
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'; // ✅ Import react-query client
 
+// ✅ Create QueryClient instance
+const queryClient = new QueryClient();
 
 // AOS animation setup
 AOS.init({
@@ -35,10 +41,11 @@ AOS.init({
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-  
+    {/* ✅ Wrap with QueryClientProvider */}
+    <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <RouterProvider router={router} />
       </AuthProvider>
-    
-  </StrictMode>,
-)
+    </QueryClientProvider>
+  </StrictMode>
+);

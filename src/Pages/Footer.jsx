@@ -1,6 +1,7 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, Github } from 'lucide-react';
+import { FaDog } from 'react-icons/fa'; // 🐶 Dog icon
 
 const Footer = () => {
   return (
@@ -9,9 +10,12 @@ const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 py-8 grid grid-cols-1 sm:grid-cols-3 gap-8 items-start">
         {/* Logo */}
         <div>
-          <div className="text-2xl font-bold text-blue-600">
-                    <Link to="/"><span className='text-4xl text-pink-500'>Pet</span><span >Adoption</span></Link>
-                  </div>
+          <div className="text-2xl font-bold text-blue-600 flex items-center space-x-2">
+            <Link to="/" className="flex items-center space-x-1">
+              <FaDog className="text-pink-500" size={32} />
+              <span className="text-2xl sm:text-3xl font-bold">Adoption</span>
+            </Link>
+          </div>
           <p className="mt-2 text-sm text-gray-700">Bringing you the best service.</p>
         </div>
 
@@ -20,9 +24,9 @@ const Footer = () => {
           <h2 className="text-lg font-semibold mb-3">Pages</h2>
           <ul className="space-y-2">
             <li><Link to="/" className="hover:text-blue-600">Home</Link></li>
-            <li><Link to="/about" className="hover:text-blue-600">About</Link></li>
-            <li><Link to="/services" className="hover:text-blue-600">Services</Link></li>
             <li><Link to="/contact" className="hover:text-blue-600">Contact</Link></li>
+            <li><Link to="/petlisting" className="hover:text-blue-600">Pet Listing</Link></li>
+            <li><Link to="/donationcompaigns" className="hover:text-blue-600">Donation Campaigns</Link></li>
           </ul>
         </div>
 
@@ -30,10 +34,10 @@ const Footer = () => {
         <div>
           <h2 className="text-lg font-semibold mb-3">Follow us</h2>
           <div className="flex space-x-4">
-            <a href="#" className="hover:text-blue-600"><Facebook size={20} /></a>
-            <a href="#" className="hover:text-blue-600 font-bold"><Twitter size={20} /></a>
-            <a href="#" className="hover:text-blue-600"><Instagram size={20} /></a>
-            <a href="#" className="hover:text-blue-600"><Github size={20} /></a>
+            <a href="www.facebook.com/petadoption" className="hover:text-blue-600"><Facebook size={20} /></a>
+            <a href="www.twitter.com/petadoption" className="hover:text-blue-600"><Twitter size={20} /></a>
+            <a href="instragram.com/petadoption" className="hover:text-blue-600"><Instagram size={20} /></a>
+            <a href="github.com/petadopt10" className="hover:text-blue-600"><Github size={20} /></a>
           </div>
         </div>
       </div>

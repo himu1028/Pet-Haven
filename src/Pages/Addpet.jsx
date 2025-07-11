@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import axios from 'axios';
+import useAuth from '../Hooks/useAuth';
 
 const categoryOptions = [
   { value: 'Dog', label: 'Dog' },
@@ -12,6 +13,8 @@ const categoryOptions = [
 ];
 
 const Addpet = () => {
+  const { user} = useAuth();
+  
   const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
 
@@ -35,9 +38,10 @@ const Addpet = () => {
 
     try {
       const res = await axios.post(
-        `https://api.imgbb.com/1/upload?key=your_imgbb_api_key`, // 🛑 Replace with your key
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`, // 🛑 Replace with your key
         formData
       );
+      console.log(res.data)
       setImageUrl(res.data.data.url);
     } catch (err) {
       console.error('Image upload failed', err);
@@ -55,6 +59,7 @@ const Addpet = () => {
 
     const petData = {
       petImage: imageUrl,
+      email:user.email,
       petName: data.petName,
       petAge: data.petAge,
       petCategory: data.petCategory,

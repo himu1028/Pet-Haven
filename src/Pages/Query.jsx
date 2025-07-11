@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Typewriter } from 'react-simple-typewriter';
 
 const Query = () => {
   const [openIndex, setOpenIndex] = useState(null);
@@ -56,7 +57,22 @@ const Query = () => {
   return (
     <div className="max-w-8xl mx-auto mt-10" id="accordion-collapse">
 
-        <h2 className='text-3xl text-pink-500 font-bold py-10'>Know Your Query</h2>
+         <div className="text-2xl md:text-3xl pb-10 text-pink-500 font-bold">
+                <Typewriter
+                  words={[
+                    'Know Your Query',
+                   'Know Your Query',
+                    'Know Your Query',
+                  ]}
+                  loop={5}
+                  cursor
+                  cursorStyle="|"
+                  typeSpeed={70}
+                  deleteSpeed={50}
+                  delaySpeed={1000}
+                />
+              </div>
+        
       {accordionData.map((item, index) => (
         <div key={index}>
           <h2>

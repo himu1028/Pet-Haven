@@ -1,4 +1,5 @@
 import React from 'react';
+import { Typewriter } from 'react-simple-typewriter';
 
 const About = () => {
   return (
@@ -6,7 +7,21 @@ const About = () => {
       <div className="max-w-8xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
         {/* Text Section */}
         <div className="md:w-1/2">
-          <h2 className="text-3xl font-bold mb-4 text-gray-800">About Us</h2>
+            <div className="text-2xl md:text-3xl pb-10 text-pink-500 font-bold">
+                  <Typewriter
+                    words={[
+                      'About Us',
+                      'About Us',
+                      'About Us',
+                    ]}
+                    loop={5}
+                    cursor
+                    cursorStyle="|"
+                    typeSpeed={70}
+                    deleteSpeed={50}
+                    delaySpeed={1000}
+                  />
+                </div>
           <p className="text-gray-700 mb-3 text-lg">
             <strong><span className='text-2xl text-pink-500'>Pet </span><span className='text-blue-500'>Adoption</span></strong> is a platform built to help abandoned and rescued animals find loving homes. 
             Users can browse available pets, view detailed profiles, and connect with shelters or pet owners directly.
