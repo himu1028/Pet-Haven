@@ -93,7 +93,7 @@ const MyPets = () => {
         cell: ({ row }) => (
           <div className="space-x-2">
             <Link
-  to={`/pets/${row.original._id}`}
+  to={`/mypets/${row.original._id}`}
   className="bg-blue-500 text-white px-2 py-1 rounded inline-block"
 >
   Update

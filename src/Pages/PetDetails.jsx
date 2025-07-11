@@ -6,15 +6,13 @@ import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import useAuth from '../Hooks/useAuth';
 
-
 Modal.setAppElement('#root');
 
 const PetDetails = () => {
-    const { user} = useAuth();
-    
+  const { user } = useAuth();
   const pet = useLoaderData();
   const [modalIsOpen, setIsOpen] = useState(false);
-console.log(pet)
+
   const {
     register,
     handleSubmit,
@@ -22,14 +20,12 @@ console.log(pet)
     formState: { errors }
   } = useForm();
 
-  
-
   const onSubmit = async (data) => {
     const adoptionData = {
       petId: pet._id,
       petName: pet.petName,
       petImage: pet.petImage,
-      userName: user.name,
+      userName: user.displayName,
       email: user.email,
       phone: data.phone,
       address: data.address,
@@ -37,6 +33,7 @@ console.log(pet)
     };
 
     try {
+      // Step 1: POST the adoption request
       const res = await fetch("http://localhost:3000/adoptions", {
         method: "POST",
         headers: {
@@ -46,12 +43,23 @@ console.log(pet)
       });
 
       const result = await res.json();
+
+      // Step 2: If success, PATCH the pet as adopted = true
       if (result.insertedId) {
+        await fetch(`http://localhost:3000/pets/${pet._id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ adopted: true })
+        });
+
         Swal.fire("Request Sent!", "Your adoption request has been submitted.", "success");
         setIsOpen(false);
         reset();
       }
     } catch (err) {
+      console.error(err);
       Swal.fire("Error", "Failed to submit adoption request", "error");
     }
   };
@@ -88,7 +96,7 @@ console.log(pet)
       >
         <h2 className="text-xl font-semibold mb-4">Adopt {pet.petName}</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          {/* Pet name (hidden) */}
+
           <input type="hidden" value={pet.petName} readOnly />
           <input type="hidden" value={pet._id} readOnly />
           <input type="hidden" value={pet.petImage} readOnly />
@@ -96,8 +104,7 @@ console.log(pet)
           {/* User Name */}
           <input
             type="text"
-            value={user?.displayName
-}
+            value={user?.displayName}
             disabled
             className="w-full px-4 py-2 bg-gray-100 rounded border"
           />

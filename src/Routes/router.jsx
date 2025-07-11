@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
     Component: DonationCampaigns
 },
 {
-        path:'/pets/:id',
+        path:'/mypets/:id',
         Component:UpdateMyPets,
         loader: ({ params }) => fetch(`http://localhost:3000/pets/${params.id}`)
       },

@@ -66,14 +66,14 @@ console.log(campaigns)
           <tbody>
             {campaigns.map((campaign) => {
               const progress = Math.min(
-                (campaign.donatedAmount / campaign.maxAmount) * 100,
+                (campaign.donatedAmount / campaign.maxDonation) * 100,
                 100
               );
 
               return (
                 <tr key={campaign._id} className="border-t">
                   <td className="p-2 border">{campaign.petName}</td>
-                  <td className="p-2 border">${campaign.maxAmount}</td>
+                  <td className="p-2 border">${campaign.maxDonation}</td>
                   <td className="p-2 border w-60">
                     <div className="w-full bg-gray-200 h-4 rounded overflow-hidden">
                       <div

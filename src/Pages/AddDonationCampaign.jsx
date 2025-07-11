@@ -49,7 +49,7 @@ const AddDonationCampaign = () => {
       location: data.location,
       contactEmail: user.email,
       organizerName: data.organizer,
-      
+      donatedAmount:0,
 maxDonation: data.maxAmount,
       lastDate: data.lastDate,
       shortDesc: data.shortDesc,
