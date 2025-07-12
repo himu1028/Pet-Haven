@@ -1,31 +1,108 @@
 import React, { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import RecommendedDonations from './RecommendedDonations';
+import { loadStripe } from '@stripe/stripe-js';
+import {
+  Elements,
+  CardElement,
+  useStripe,
+  useElements,
+} from '@stripe/react-stripe-js';
+import axios from 'axios';
+import useAuth from '../Hooks/useAuth';
 
+// Load Stripe publishable key from env
+const stripePromise = loadStripe(import.meta.env.VITE_stripe_key);
+
+// ✅ Checkout Form
+const CheckoutForm = ({ amount, email, donation, onClose }) => {
+  const stripe = useStripe();
+  const elements = useElements();
+console.log(typeof amount)
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!stripe || !elements) return;
+
+    try {
+      // 1. Create payment intent
+      const res = await axios.post('http://localhost:3000/donatorsS', {
+        amount: parseInt(amount),
+      });
+      const clientSecret = res.data.clientSecret;
+
+      // 2. Confirm payment
+      const result = await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: elements.getElement(CardElement),
+          billing_details: { email },
+        },
+      });
+
+      if (result.error) {
+        console.error(result.error.message);
+      } else if (result.paymentIntent.status === 'succeeded') {
+        // 3. Save to MongoDB
+        const donationInfo = {
+          petId: donation._id,
+          petName: donation.petName,
+          donatedFor: donation.petName,
+          amount: parseInt(amount),
+          email,
+          paymentId: result.paymentIntent.id,
+          donatedAt: new Date(),
+        };
+
+        await axios.post('http://localhost:3000/donators', donationInfo);
+
+        alert('Donation successful!');
+        onClose();
+      }
+    } catch (err) {
+      console.error('Payment error:', err.message);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <CardElement className="p-2 border rounded" />
+      <button
+        type="submit"
+        disabled={!stripe}
+        className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+      >
+        Pay ${amount}
+      </button>
+    </form>
+  );
+};
+
+// ✅ Main Component
 const CompaignsDetails = () => {
   const donation = useLoaderData();
-  console.log(donation)
+  const { user } = useAuth();
+
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState('');
 
   const handleDonateClick = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
-  const handleAmountChange = (e) => setAmount(e.target.value);
-
-  const handlePayment = () => {
-    console.log('Proceed to pay:', amount);
-    // ekhane payment logic add korbi
-    setShowModal(false);
-  };
 
   return (
     <div className="max-w-6xl mx-auto p-6">
       {/* Donation Details */}
       <div className="bg-white shadow-lg rounded-xl p-6 mb-10">
-        <img src={donation.petImage} alt={donation.petName} className="w-full h-64 object-cover rounded-lg mb-4" />
+        <img
+          src={donation.petImage}
+          alt={donation.petName}
+          className="w-full h-64 object-cover rounded-lg mb-4"
+        />
         <h2 className="text-3xl font-bold mb-2">{donation.petName}</h2>
-        <p className="text-gray-700 mb-2"><span className="font-semibold">Max Donation:</span> ${donation.maxDonation}</p>
-        <p className="text-gray-700 mb-2"><span className="font-semibold">Donated So Far:</span> ${donation.donatedAmount}</p>
+        <p className="text-gray-700 mb-2">
+          <span className="font-semibold">Max Donation:</span> ${donation.maxDonation}
+        </p>
+        <p className="text-gray-700 mb-2">
+          <span className="font-semibold">Donated So Far:</span> ${donation.donatedAmount}
+        </p>
         <p className="text-gray-600 mb-4">{donation.description}</p>
         <button
           onClick={handleDonateClick}
@@ -39,28 +116,57 @@ const CompaignsDetails = () => {
       {showModal && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
           <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
-            <h3 className="text-xl font-semibold mb-4">Enter Donation Amount</h3>
+            <h3 className="text-xl font-semibold mb-4">Donate to {donation.petName}</h3>
+
+            {/* Donated For (read-only) */}
+            <input
+              type="text"
+              value={donation.petName}
+              disabled
+              className="w-full border border-gray-300 p-2 rounded mb-3 bg-gray-100"
+            />
+
+            {/* User Email (read-only) */}
+            <input
+              type="email"
+              value={user?.email || ''}
+              disabled
+              className="w-full border border-gray-300 p-2 rounded mb-3 bg-gray-100"
+            />
+
+            {/* Amount Input with validation */}
             <input
               type="number"
               value={amount}
-              onChange={handleAmountChange}
-              className="w-full border border-gray-300 p-2 rounded mb-4"
-              placeholder="Enter amount (e.g. 50)"
+              onChange={(e) => {
+                const inputAmount = parseInt(e.target.value);
+                if (inputAmount <= donation.maxDonation) {
+                  setAmount(inputAmount);
+                } else {
+                  alert(`You can't donate more than $${donation.maxDonation}`);
+                }
+              }}
+              className="w-full border border-gray-300 p-2 rounded mb-3"
+              placeholder={`Enter amount (Max $${donation.maxDonation})`}
+              required
             />
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={handleCloseModal}
-                className="px-4 py-2 rounded bg-gray-300 hover:bg-gray-400"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handlePayment}
-                className="px-4 py-2 rounded bg-green-600 text-white hover:bg-green-700"
-              >
-                Proceed to Payment
-              </button>
-            </div>
+
+            {/* Stripe Form */}
+            <Elements stripe={stripePromise}>
+              <CheckoutForm
+                amount={amount}
+                email={user?.email}
+                donation={donation}
+                onClose={handleCloseModal}
+              />
+            </Elements>
+
+            <button
+              onClick={handleCloseModal}
+              className="mt-4 px-4 py-2 rounded bg-gray-300 hover:bg-gray-400 w-full"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
