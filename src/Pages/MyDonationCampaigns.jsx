@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react"; 
 import axios from "axios";
 import Modal from "react-modal";
 import { Link } from "react-router-dom";
@@ -11,7 +11,7 @@ const MyDonationCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [donators, setDonators] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-console.log(campaigns)
+console.log(donators)
   // Load user's donation campaigns
   useEffect(() => {
     if (user?.email) {
@@ -37,14 +37,15 @@ console.log(campaigns)
     }
   };
 
-  // View donators
-  const handleViewDonators = async (id) => {
+  // View donators by petId - fetch and open modal
+  const handleViewDonators = async (petId) => {
+    console.log(petId)
     try {
-      const res = await axios.get(`http://localhost:3000/donators/${id}`);
+      const res = await axios.get(`http://localhost:3000/donators?petId=${petId}`)
       setDonators(res.data);
       setModalIsOpen(true);
-    } catch (err) {
-      console.error("Failed to load donators:", err);
+    } catch (error) {
+      console.error("Error fetching donators:", error);
     }
   };
 
@@ -106,7 +107,7 @@ console.log(campaigns)
                       Edit
                     </Link>
                     <button
-                      onClick={() => handleViewDonators(campaign._id)}
+                      onClick={() => handleViewDonators(campaign._id.toString())}
                       className="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded"
                     >
                       View Donators
@@ -121,31 +122,48 @@ console.log(campaigns)
 
       {/* Modal for Donators */}
       <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        className="bg-white p-6 rounded-lg shadow max-w-md mx-auto mt-20"
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-      >
-        <h3 className="text-xl font-semibold mb-4">Donators</h3>
-        {donators.length > 0 ? (
-          <ul className="space-y-2">
-            {donators.map((d, i) => (
-              <li key={i} className="flex justify-between">
-                <span>{d.name}</span>
-                <span className="font-bold text-green-600">${d.amount}</span>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No donations yet.</p>
-        )}
-        <button
-          onClick={() => setModalIsOpen(false)}
-          className="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded"
-        >
-          Close
-        </button>
-      </Modal>
+  isOpen={modalIsOpen}
+  onRequestClose={() => setModalIsOpen(false)}
+  className="bg-white p-6 rounded-lg shadow max-w-2xl mx-auto mt-20"
+  overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+>
+  <h3 className="text-2xl font-semibold mb-6 text-center">Donators Info</h3>
+
+  {donators.length > 0 ? (
+    <div className="overflow-x-auto">
+      <table className="min-w-full text-left border">
+        <thead className="bg-gray-100">
+          <tr>
+            <th className="p-2 border">Donators Email</th>
+            <th className="p-2 border">Amount</th>
+            <th className="p-2 border">Donated To</th>
+          </tr>
+        </thead>
+        <tbody>
+          {donators.map((d, i) => (
+            <tr key={i} className="border-t">
+              <td className="p-2 border">{d.email}</td>
+              <td className="p-2 border text-green-600 font-semibold">${d.amount}</td>
+              <td className="p-2 border">{d.petName}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ) : (
+    <p className="text-center text-xl font-medium text-gray-600">No donations yet.</p>
+  )}
+
+  <div className="flex justify-center mt-6">
+    <button
+      onClick={() => setModalIsOpen(false)}
+      className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded"
+    >
+      Close
+    </button>
+  </div>
+</Modal>
+
     </div>
   );
 };

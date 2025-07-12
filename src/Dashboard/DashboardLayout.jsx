@@ -12,7 +12,7 @@ const DashboardLayout = () => {
     { name: 'Adoption Request', path: 'dashboard/adoptionrequest' },
     { name: 'Create Compaigns', path: 'dashboard/adddonationscampaigns' },
     { name: 'My Donation Compaigns', path: 'dashboard/mydonationcampaign' },
-    { name: 'My Donations', path: 'dashboard/addPet' }
+    { name: 'My Donations', path: 'dashboard/mydonations' }
   ];
 
   return (
