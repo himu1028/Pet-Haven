@@ -11,9 +11,10 @@ const {register,handleSubmit,formState: { errors }}=useForm();
 
 
 const handleGithub = () => {
-  // Future logic for Facebook Login
+  
   loginWithgithub()
     .then(result => {
+       navigate("/");
       console.log(result);
     })
     .catch(error => {

@@ -6,9 +6,21 @@ import Swal from 'sweetalert2';
 
 const Register = () => {
     const navigate = useNavigate()
-    const {createUser,googleSignIn}= useAuth();
+    const {createUser,googleSignIn,loginWithgithub}= useAuth();
 const {register,handleSubmit,formState: { errors }}=useForm();
 
+
+const handleGithub = () => {
+
+  loginWithgithub()
+    .then(result => {
+       navigate("/");
+      console.log(result);
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
 
 
 const handleGoogle = () =>{
@@ -127,6 +139,17 @@ const onSubmit = data => {
         <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" className="h-5 w-5" />
         <span className="text-sm font-medium text-gray-700">Continue with Google</span>
       </button>
+
+{/* GitHub Login Button */}
+<button
+  type="button"
+  onClick={handleGithub}
+  className="w-full flex items-center justify-center gap-3 border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition mt-2"
+>
+  <img src="https://www.svgrepo.com/show/512317/github-142.svg" alt="GitHub" className="h-5 w-5" />
+  <span className="text-sm font-medium text-gray-700">Continue with Github</span>
+</button>
+
 
           <p className="mt-6 text-center text-sm ">
             Already Register?{" "}
