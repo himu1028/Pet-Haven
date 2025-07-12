@@ -59,6 +59,10 @@ export const router = createBrowserRouter([
       loader: ({ params }) => fetch(`http://localhost:3000/donationCompaigns/${params.id}`)
 
     },
+ { path: "/redonationCompaigns/:id",
+      Component:CompaignsDetails,
+      
+    },
 
 ]
   },

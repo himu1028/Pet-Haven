@@ -14,11 +14,10 @@ import useAuth from '../Hooks/useAuth';
 // Load Stripe publishable key from env
 const stripePromise = loadStripe(import.meta.env.VITE_stripe_key);
 
-// ✅ Checkout Form
 const CheckoutForm = ({ amount, email, donation, onClose }) => {
   const stripe = useStripe();
   const elements = useElements();
-console.log(typeof amount)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return;
@@ -40,8 +39,9 @@ console.log(typeof amount)
 
       if (result.error) {
         console.error(result.error.message);
+        alert(`Payment failed: ${result.error.message}`);
       } else if (result.paymentIntent.status === 'succeeded') {
-        // 3. Save to MongoDB
+        // 3. Save to MongoDB donation collection
         const donationInfo = {
           petId: donation._id,
           petName: donation.petName,
@@ -54,11 +54,18 @@ console.log(typeof amount)
 
         await axios.post('http://localhost:3000/donators', donationInfo);
 
+        // 4. PATCH to update donatedAmount field in the pet donation document
+        await axios.patch(`http://localhost:3000/donationCompaigns
+/${donation._id}`, {
+          donatedAmount: parseInt(amount),
+        });
+
         alert('Donation successful!');
         onClose();
       }
     } catch (err) {
       console.error('Payment error:', err.message);
+      alert(`Payment error: ${err.message}`);
     }
   };
 
@@ -67,7 +74,7 @@ console.log(typeof amount)
       <CardElement className="p-2 border rounded" />
       <button
         type="submit"
-        disabled={!stripe}
+        disabled={!stripe || !amount}
         className="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
       >
         Pay ${amount}
@@ -76,7 +83,6 @@ console.log(typeof amount)
   );
 };
 
-// ✅ Main Component
 const CompaignsDetails = () => {
   const donation = useLoaderData();
   const { user } = useAuth();
@@ -92,18 +98,18 @@ const CompaignsDetails = () => {
       {/* Donation Details */}
       <div className="bg-white shadow-lg rounded-xl p-6 mb-10">
         <img
-          src={donation.petImage}
-          alt={donation.petName}
+          src={donation?.petImage}
+          alt={donation?.petName}
           className="w-full h-64 object-cover rounded-lg mb-4"
         />
-        <h2 className="text-3xl font-bold mb-2">{donation.petName}</h2>
+        <h2 className="text-3xl font-bold mb-2">{donation?.petName}</h2>
         <p className="text-gray-700 mb-2">
-          <span className="font-semibold">Max Donation:</span> ${donation.maxDonation}
+          <span className="font-semibold">Max Donation:</span> ${donation?.maxDonation}
         </p>
         <p className="text-gray-700 mb-2">
-          <span className="font-semibold">Donated So Far:</span> ${donation.donatedAmount}
+          <span className="font-semibold">Donated So Far:</span> ${donation?.donatedAmount}
         </p>
-        <p className="text-gray-600 mb-4">{donation.description}</p>
+        <p className="text-gray-600 mb-4">{donation?.description}</p>
         <button
           onClick={handleDonateClick}
           className="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
@@ -140,7 +146,7 @@ const CompaignsDetails = () => {
               value={amount}
               onChange={(e) => {
                 const inputAmount = parseInt(e.target.value);
-                if (inputAmount <= donation.maxDonation) {
+                if (!isNaN(inputAmount) && inputAmount <= donation.maxDonation) {
                   setAmount(inputAmount);
                 } else {
                   alert(`You can't donate more than $${donation.maxDonation}`);
