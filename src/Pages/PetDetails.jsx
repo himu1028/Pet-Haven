@@ -23,17 +23,19 @@ const PetDetails = () => {
   const onSubmit = async (data) => {
     const adoptionData = {
       petId: pet._id,
+      status:'pending',
       petName: pet.petName,
       petImage: pet.petImage,
       userName: user.displayName,
       email: user.email,
+      ownerEmail: pet.email,
       phone: data.phone,
       address: data.address,
       requestedAt: new Date()
     };
 
     try {
-      // Step 1: POST the adoption request
+      // ✅ Step: POST only the adoption request (PATCH removed)
       const res = await fetch("http://localhost:3000/adoptions", {
         method: "POST",
         headers: {
@@ -44,16 +46,7 @@ const PetDetails = () => {
 
       const result = await res.json();
 
-      // Step 2: If success, PATCH the pet as adopted = true
       if (result.insertedId) {
-        await fetch(`http://localhost:3000/pets/${pet._id}`, {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ adopted: true })
-        });
-
         Swal.fire("Request Sent!", "Your adoption request has been submitted.", "success");
         setIsOpen(false);
         reset();

@@ -1,85 +1,118 @@
-import React, { useEffect, useState } from "react";
-import useAuth from "../Hooks/useAuth";
-import axios from "axios";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import useAuth from '../Hooks/useAuth';
 
-const AdoptionRequests = () => {
+const AdoptionRequest = () => {
   const { user } = useAuth();
   const [requests, setRequests] = useState([]);
 
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:3000/adoptions?email=${user.email}`)
+        .get(`http://localhost:3000/adoption-requests?email=${user.email}`)
         .then((res) => setRequests(res.data))
-        .catch((err) => console.error("Failed to fetch adoption requests:", err));
+        .catch((err) => console.log(err));
     }
   }, [user]);
 
-  const handleStatusUpdate = async (id, status) => {
+  const handleAction = async (petId, requestId) => {
+    console.log("Trying to update pet with ID:", petId);
+    console.log("Trying to update adoption request ID:", requestId);
+
     try {
-      await axios.patch(`http://localhost:3000/adoptionRequests/${id}`, {
-        status,
+      // 1. Update pet status
+      await axios.patch(`http://localhost:3000/pets/${petId}`, {
+        adopted: true
       });
 
+      // 2. Update adoption request status
+      await axios.patch(`http://localhost:3000/adoption-requests/${requestId}`, {
+        status: "Adopted Confirm"
+      });
+
+      // 3. Update UI
       setRequests((prev) =>
-        prev.map((req) => (req._id === id ? { ...req, status } : req))
+        prev.map((r) =>
+          r._id === requestId ? { ...r, status: "Adopted Confirm" } : r
+        )
       );
-    } catch (err) {
-      console.error("Status update failed:", err);
+
+      console.log("✅ Update success");
+    } catch (error) {
+      console.error("❌ Update failed:", error);
+    }
+  };
+
+  const handleReject = async (requestId) => {
+    console.log("Deleting request ID:", requestId);
+    try {
+      await axios.delete(`http://localhost:3000/adoption-requests/${requestId}`);
+      console.log("❌ Rejected and deleted");
+
+      setRequests((prev) => prev.filter((r) => r._id !== requestId));
+    } catch (error) {
+      console.error("🚫 Reject failed:", error);
     }
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold mb-6 text-center">Adoption Requests</h2>
-
+    <div className="p-5">
+      <h2 className="text-2xl font-bold mb-4">My Pet's Adoption Requests</h2>
       <div className="overflow-x-auto">
-        <table className="min-w-full border text-left">
-          <thead className="bg-gray-100">
-            <tr>
-              <th className="p-2 border">Pet</th>
-              <th className="p-2 border">Adopter Info</th>
-              <th className="p-2 border">Address</th>
+        <table className="min-w-full border border-gray-300 text-left">
+          <thead>
+            <tr className="bg-gray-100">
+              <th className="p-2 border">#</th>
+              <th className="p-2 border">Pet Name</th>
+              <th className="p-2 border">Pet Image</th>
+              <th className="p-2 border">Adopter Name</th>
+              <th className="p-2 border">Email</th>
+              <th className="p-2 border">Phone</th>
+              <th className="p-2 border">Location</th>
               <th className="p-2 border">Status</th>
               <th className="p-2 border">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {requests.map((req) => (
-              <tr key={req._id} className="border-t">
-                <td className="p-2 border flex items-center gap-3">
-                  <img src={req.petImage} alt="Pet" className="w-16 h-16 object-cover rounded" />
-                  <span>{req.petName}</span>
-                </td>
+            {requests.map((req, index) => (
+              <tr key={req._id}>
+                <td className="p-2 border">{index + 1}</td>
+                <td className="p-2 border">{req.petName}</td>
                 <td className="p-2 border">
-                  <p><strong>Name:</strong> {user.displayName}</p>
-                  <p><strong>Email:</strong> {req.email}</p>
-                  <p><strong>Phone:</strong> {req.phone}</p>
+                  <img
+                    src={req.petImage}
+                    alt="pet"
+                    className="w-16 h-16 object-cover rounded"
+                  />
                 </td>
+                <td className="p-2 border">{req.adopterName}</td>
+                <td className="p-2 border">{req.email}</td>
+                <td className="p-2 border">{req.phone}</td>
                 <td className="p-2 border">{req.address}</td>
-                <td className="p-2 border capitalize font-semibold text-blue-600">{req.status || "Pending"}</td>
+                <td className="p-2 border font-semibold text-blue-600">
+                  {req.status || "Pending"}
+                </td>
                 <td className="p-2 border space-x-2">
                   <button
-                    onClick={() => handleStatusUpdate(req._id, "accepted")}
-                    className="bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded"
-                    disabled={req.status === "accepted"}
+                    className="px-2 py-1 bg-green-500 text-white rounded"
+                    onClick={() => handleAction(req.petId, req._id)}
                   >
                     Accept
                   </button>
                   <button
-                    onClick={() => handleStatusUpdate(req._id, "rejected")}
-                    className="bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded"
-                    disabled={req.status === "rejected"}
+                    className="px-2 py-1 bg-red-500 text-white rounded"
+                    onClick={() => handleReject(req._id)}
                   >
                     Reject
                   </button>
                 </td>
               </tr>
             ))}
+
             {requests.length === 0 && (
               <tr>
-                <td colSpan="5" className="text-center py-6 text-gray-500">
-                  No adoption requests found.
+                <td className="p-4 text-center border" colSpan="9">
+                  No adoption requests found for your pets.
                 </td>
               </tr>
             )}
@@ -90,4 +123,4 @@ const AdoptionRequests = () => {
   );
 };
 
-export default AdoptionRequests;
+export default AdoptionRequest;
