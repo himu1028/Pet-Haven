@@ -23,8 +23,9 @@ console.log(donators)
 
   // Pause campaign
   const handlePauseToggle = async (id, isPaused) => {
+    console.log(id)
     try {
-      await axios.patch(`http://localhost:3000/donationCompaigns/${id}`, {
+      await axios.patch(`http://localhost:3000/donationCompaigns/${id}/pause`, {
         paused: !isPaused,
       });
       setCampaigns((prev) =>

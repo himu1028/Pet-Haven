@@ -10,6 +10,7 @@ import {
 } from '@stripe/react-stripe-js';
 import axios from 'axios';
 import useAuth from '../Hooks/useAuth';
+import Swal from 'sweetalert2';
 
 // Load Stripe publishable key from env
 const stripePromise = loadStripe(import.meta.env.VITE_stripe_key);
@@ -39,7 +40,7 @@ const CheckoutForm = ({ amount, email, donation, onClose }) => {
 
       if (result.error) {
         console.error(result.error.message);
-        alert(`Payment failed: ${result.error.message}`);
+        Swal.fire("Payment Failed", result.error.message, "error");
       } else if (result.paymentIntent.status === 'succeeded') {
         // 3. Save to MongoDB donation collection
         const donationInfo = {
@@ -54,18 +55,17 @@ const CheckoutForm = ({ amount, email, donation, onClose }) => {
 
         await axios.post('http://localhost:3000/donators', donationInfo);
 
-        // 4. PATCH to update donatedAmount field in the pet donation document
-        await axios.patch(`http://localhost:3000/donationCompaigns
-/${donation._id}`, {
+        // 4. Update donatedAmount
+        await axios.patch(`http://localhost:3000/donationCompaigns/${donation._id}`, {
           donatedAmount: parseInt(amount),
         });
 
-        alert('Donation successful!');
+        Swal.fire("Success!", "Donation successful!", "success");
         onClose();
       }
     } catch (err) {
       console.error('Payment error:', err.message);
-      alert(`Payment error: ${err.message}`);
+      Swal.fire("Error", err.message, "error");
     }
   };
 
@@ -90,7 +90,20 @@ const CompaignsDetails = () => {
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState('');
 
-  const handleDonateClick = () => setShowModal(true);
+  // ✅ Check paused status before opening modal
+  const handleDonateClick = () => {
+    if (donation?.paused) {
+      return Swal.fire({
+        icon: "warning",
+        title: "This campaign is paused!",
+        text: "The owner has temporarily paused donations for this campaign.",
+        confirmButtonText: "OK",
+      });
+    }
+
+    setShowModal(true);
+  };
+
   const handleCloseModal = () => setShowModal(false);
 
   return (
@@ -124,7 +137,6 @@ const CompaignsDetails = () => {
           <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-md">
             <h3 className="text-xl font-semibold mb-4">Donate to {donation.petName}</h3>
 
-            {/* Donated For (read-only) */}
             <input
               type="text"
               value={donation.petName}
@@ -132,7 +144,6 @@ const CompaignsDetails = () => {
               className="w-full border border-gray-300 p-2 rounded mb-3 bg-gray-100"
             />
 
-            {/* User Email (read-only) */}
             <input
               type="email"
               value={user?.email || ''}
@@ -140,7 +151,6 @@ const CompaignsDetails = () => {
               className="w-full border border-gray-300 p-2 rounded mb-3 bg-gray-100"
             />
 
-            {/* Amount Input with validation */}
             <input
               type="number"
               value={amount}
@@ -149,7 +159,7 @@ const CompaignsDetails = () => {
                 if (!isNaN(inputAmount) && inputAmount <= donation.maxDonation) {
                   setAmount(inputAmount);
                 } else {
-                  alert(`You can't donate more than $${donation.maxDonation}`);
+                  Swal.fire("Invalid Amount", `You can't donate more than $${donation.maxDonation}`, "warning");
                 }
               }}
               className="w-full border border-gray-300 p-2 rounded mb-3"
