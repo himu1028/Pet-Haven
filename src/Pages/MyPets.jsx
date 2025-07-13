@@ -1,15 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
 import axios from "axios";
-
 import {
   useReactTable,
   getCoreRowModel,
   getSortedRowModel,
+  getPaginationRowModel,
   flexRender,
   createColumnHelper,
 } from "@tanstack/react-table";
 import Modal from "react-modal";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 
 Modal.setAppElement("#root");
@@ -17,24 +17,45 @@ Modal.setAppElement("#root");
 const MyPets = () => {
   const { user } = useAuth();
   const [pets, setPets] = useState([]);
+  const [totalPets, setTotalPets] = useState(0);
   const [sorting, setSorting] = useState([]);
   const [deleteId, setDeleteId] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
- console.log(pets._id)
 
-  // Load user pets
+  const [pagination, setPagination] = useState({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
+  // Load paginated pets
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:3000/mypets?email=${user.email}`)
-        .then((res) => setPets(res.data));
+        .get("http://localhost:3000/mypets", {
+          params: {
+            email: user.email,
+            page: pagination.pageIndex,
+            limit: pagination.pageSize,
+          },
+        })
+        .then((res) => {
+          const petData = res.data?.pets || [];
+          const totalCount = res.data?.total || 0;
+          setPets(petData);
+          setTotalPets(totalCount);
+        })
+        .catch((err) => {
+          console.error("Error loading pets", err);
+          setPets([]);
+          setTotalPets(0);
+        });
     }
-  }, [user]);
+  }, [user, pagination]);
 
   const handleDelete = async () => {
     try {
       await axios.delete(`http://localhost:3000/mypets/${deleteId}`);
-      setPets(pets.filter((pet) => pet._id !== deleteId));
+      setPets((prev) => prev.filter((pet) => pet._id !== deleteId));
       setModalIsOpen(false);
     } catch (err) {
       console.error("Delete failed", err);
@@ -93,11 +114,11 @@ const MyPets = () => {
         cell: ({ row }) => (
           <div className="space-x-2">
             <Link
-  to={`/mypets/${row.original._id}`}
-  className="bg-blue-500 text-white px-2 py-1 rounded inline-block"
->
-  Update
-</Link>
+              to={`/mypets/${row.original._id}`}
+              className="bg-blue-500 text-white px-2 py-1 rounded inline-block"
+            >
+              Update
+            </Link>
             <button
               onClick={() => {
                 setDeleteId(row.original._id);
@@ -123,12 +144,18 @@ const MyPets = () => {
   );
 
   const table = useReactTable({
-    data: pets,
+    data: Array.isArray(pets) ? pets : [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    state: { sorting },
-    onSortingChange: setSorting,
+    getPaginationRowModel: getPaginationRowModel(),
+    state: {
+      sorting,
+      pagination,
+    },
+    onPaginationChange: setPagination,
+    manualPagination: true,
+    pageCount: Math.ceil(totalPets / pagination.pageSize),
   });
 
   return (
@@ -145,10 +172,15 @@ const MyPets = () => {
                     onClick={header.column.getToggleSortingHandler()}
                     className="px-4 py-2 border cursor-pointer text-left"
                   >
-                    {flexRender(header.column.columnDef.header, header.getContext())}
+                    {flexRender(
+                      header.column.columnDef.header,
+                      header.getContext()
+                    )}
                     {header.column.getIsSorted() && (
                       <span>
-                        {header.column.getIsSorted() === "asc" ? " 🔼" : " 🔽"}
+                        {header.column.getIsSorted() === "asc"
+                          ? " 🔼"
+                          : " 🔽"}
                       </span>
                     )}
                   </th>
@@ -169,6 +201,30 @@ const MyPets = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Pagination */}
+      {totalPets > 10 && (
+        <div className="flex justify-center items-center gap-4 mt-6">
+          <button
+            onClick={() => table.previousPage()}
+            disabled={!table.getCanPreviousPage()}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Previous
+          </button>
+          <span>
+            Page {pagination.pageIndex + 1} of{" "}
+            {Math.ceil(totalPets / pagination.pageSize)}
+          </span>
+          <button
+            onClick={() => table.nextPage()}
+            disabled={!table.getCanNextPage()}
+            className="px-3 py-1 border rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
 
       {/* Delete Modal */}
       <Modal
