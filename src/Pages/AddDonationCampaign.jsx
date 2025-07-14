@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import useAuth from '../Hooks/useAuth';
-
+import useAxiosSecure from "../Hooks/useAxoisSecure";
 const AddDonationCampaign = () => {
+   const axiosSecure = useAxiosSecure();
   const [imageUrl, setImageUrl] = useState('');
   const [uploading, setUploading] = useState(false);
  const { user} = useAuth();
@@ -59,7 +60,7 @@ const AddDonationCampaign = () => {
     };
 
     try {
-      await axios.post('http://localhost:3000/donationCompaigns', campaignData);
+      await axiosSecure.post('http://localhost:3000/donationCompaigns', campaignData);
       alert('Donation campaign added successfully!');
       reset();
       setImageUrl('');

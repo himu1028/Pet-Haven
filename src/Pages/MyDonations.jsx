@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import useAuth from "../Hooks/useAuth";
+import useAxiosSecure from "../Hooks/useAxoisSecure";
 
 const MyDonations = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure();
   const [donations, setDonations] = useState([]);
 
   useEffect(() => {
     if (user?.email) {
-      axios
+      axiosSecure
         .get(`http://localhost:3000/mydonations?email=${user.email}`)
-        .then((res) => setDonations(res.data));
+        .then((res) => setDonations(res.data))
+        .catch((err) => console.error("Failed to load donations:", err));
     }
-  }, [user]);
+  }, [user, axiosSecure]);
 
   // ✅ Delete/Refund
   const handleRefund = async (id) => {
@@ -20,7 +22,7 @@ const MyDonations = () => {
     if (!confirm) return;
 
     try {
-      await axios.delete(`http://localhost:3000/donators/${id}`);
+      await axiosSecure.delete(`http://localhost:3000/donators/${id}`);
       setDonations((prev) => prev.filter((d) => d._id !== id));
     } catch (error) {
       console.error("Refund failed:", error);
@@ -32,7 +34,9 @@ const MyDonations = () => {
       <h2 className="text-3xl font-bold mb-6 text-center">My Donations</h2>
 
       {donations.length === 0 ? (
-        <p className="text-center text-lg text-gray-600">You haven't donated yet.</p>
+        <p className="text-center text-lg text-gray-600">
+          You haven't donated yet.
+        </p>
       ) : (
         <div className="overflow-x-auto">
           <table className="min-w-full text-left border">

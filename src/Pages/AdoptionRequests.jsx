@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import useAuth from '../Hooks/useAuth';
-
+import useAxiosSecure from "../Hooks/useAxoisSecure";
 const AdoptionRequest = () => {
   const { user } = useAuth();
   const [requests, setRequests] = useState([]);
-
+const axiosSecure = useAxiosSecure();
   useEffect(() => {
     if (user?.email) {
-      axios
+      axiosSecure
         .get(`http://localhost:3000/adoption-requests?email=${user.email}`)
         .then((res) => setRequests(res.data))
         .catch((err) => console.log(err));
@@ -21,12 +21,12 @@ const AdoptionRequest = () => {
 
     try {
       // 1. Update pet status
-      await axios.patch(`http://localhost:3000/pets/${petId}`, {
+      await axiosSecure.patch(`http://localhost:3000/pets/${petId}`, {
         adopted: true
       });
 
       // 2. Update adoption request status
-      await axios.patch(`http://localhost:3000/adoption-requests/${requestId}`, {
+      await axiosSecure.patch(`http://localhost:3000/adoption-requests/${requestId}`, {
         status: "Adopted Confirm"
       });
 
@@ -46,7 +46,7 @@ const AdoptionRequest = () => {
   const handleReject = async (requestId) => {
     console.log("Deleting request ID:", requestId);
     try {
-      await axios.delete(`http://localhost:3000/adoption-requests/${requestId}`);
+      await axiosSecure.delete(`http://localhost:3000/adoption-requests/${requestId}`);
       console.log("❌ Rejected and deleted");
 
       setRequests((prev) => prev.filter((r) => r._id !== requestId));

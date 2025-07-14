@@ -1,37 +1,39 @@
-import React, { useEffect, useState } from "react"; 
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
+import useAxiosSecure from "../Hooks/useAxoisSecure";
+// import useAxiosSecure from "../Hooks/useAxiosSecure"; // ✅ added
 
 Modal.setAppElement("#root");
 
 const MyDonationCampaigns = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure(); // ✅ added
   const [campaigns, setCampaigns] = useState([]);
   const [donators, setDonators] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-console.log(donators)
+
+  console.log(donators);
+
   // Load user's donation campaigns
   useEffect(() => {
     if (user?.email) {
-      axios
-        .get(`http://localhost:3000/mydonationCompaigns?email=${user.email}`)
+      axiosSecure
+        .get(`/mydonationCompaigns?email=${user.email}`)
         .then((res) => setCampaigns(res.data));
     }
-  }, [user]);
+  }, [user, axiosSecure]);
 
   // Pause campaign
   const handlePauseToggle = async (id, isPaused) => {
-    console.log(id)
+    console.log(id);
     try {
-      await axios.patch(`http://localhost:3000/donationCompaigns/${id}/pause`, {
+      await axiosSecure.patch(`/donationCompaigns/${id}/pause`, {
         paused: !isPaused,
       });
       setCampaigns((prev) =>
-        prev.map((c) =>
-          c._id === id ? { ...c, paused: !isPaused } : c
-        )
+        prev.map((c) => (c._id === id ? { ...c, paused: !isPaused } : c))
       );
     } catch (err) {
       console.error("Pause toggle failed:", err);
@@ -40,9 +42,9 @@ console.log(donators)
 
   // View donators by petId - fetch and open modal
   const handleViewDonators = async (petId) => {
-    console.log(petId)
+    console.log(petId);
     try {
-      const res = await axios.get(`http://localhost:3000/donators?petId=${petId}`)
+      const res = await axiosSecure.get(`/donators?petId=${petId}`);
       setDonators(res.data);
       setModalIsOpen(true);
     } catch (error) {
@@ -83,7 +85,9 @@ console.log(donators)
                         style={{ width: `${progress}%` }}
                       ></div>
                     </div>
-                    <p className="text-xs text-center mt-1">{progress.toFixed(1)}%</p>
+                    <p className="text-xs text-center mt-1">
+                      {progress.toFixed(1)}%
+                    </p>
                   </td>
                   <td className="p-2 border">
                     {campaign.paused ? (
@@ -108,7 +112,9 @@ console.log(donators)
                       Edit
                     </Link>
                     <button
-                      onClick={() => handleViewDonators(campaign._id.toString())}
+                      onClick={() =>
+                        handleViewDonators(campaign._id.toString())
+                      }
                       className="bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded"
                     >
                       View Donators
@@ -123,48 +129,53 @@ console.log(donators)
 
       {/* Modal for Donators */}
       <Modal
-  isOpen={modalIsOpen}
-  onRequestClose={() => setModalIsOpen(false)}
-  className="bg-white p-6 rounded-lg shadow max-w-2xl mx-auto mt-20"
-  overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
->
-  <h3 className="text-2xl font-semibold mb-6 text-center">Donators Info</h3>
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        className="bg-white p-6 rounded-lg shadow max-w-2xl mx-auto mt-20"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
+      >
+        <h3 className="text-2xl font-semibold mb-6 text-center">
+          Donators Info
+        </h3>
 
-  {donators.length > 0 ? (
-    <div className="overflow-x-auto">
-      <table className="min-w-full text-left border">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="p-2 border">Donators Email</th>
-            <th className="p-2 border">Amount</th>
-            <th className="p-2 border">Donated To</th>
-          </tr>
-        </thead>
-        <tbody>
-          {donators.map((d, i) => (
-            <tr key={i} className="border-t">
-              <td className="p-2 border">{d.email}</td>
-              <td className="p-2 border text-green-600 font-semibold">${d.amount}</td>
-              <td className="p-2 border">{d.petName}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  ) : (
-    <p className="text-center text-xl font-medium text-gray-600">No donations yet.</p>
-  )}
+        {donators.length > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-left border">
+              <thead className="bg-gray-100">
+                <tr>
+                  <th className="p-2 border">Donators Email</th>
+                  <th className="p-2 border">Amount</th>
+                  <th className="p-2 border">Donated To</th>
+                </tr>
+              </thead>
+              <tbody>
+                {donators.map((d, i) => (
+                  <tr key={i} className="border-t">
+                    <td className="p-2 border">{d.email}</td>
+                    <td className="p-2 border text-green-600 font-semibold">
+                      ${d.amount}
+                    </td>
+                    <td className="p-2 border">{d.petName}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p className="text-center text-xl font-medium text-gray-600">
+            No donations yet.
+          </p>
+        )}
 
-  <div className="flex justify-center mt-6">
-    <button
-      onClick={() => setModalIsOpen(false)}
-      className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded"
-    >
-      Close
-    </button>
-  </div>
-</Modal>
-
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={() => setModalIsOpen(false)}
+            className="bg-gray-400 hover:bg-gray-500 text-white px-6 py-2 rounded"
+          >
+            Close
+          </button>
+        </div>
+      </Modal>
     </div>
   );
 };

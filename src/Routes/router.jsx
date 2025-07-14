@@ -20,6 +20,7 @@ import MyDonationCampaigns from "../Pages/MyDonationCampaigns";
 import UpdateMyCampaigns from "../Pages/UpdateMyCampaigns";
 import AdoptionRequest from "../Pages/AdoptionRequests";
 import MyDonations from "../Pages/MyDonations";
+import PrivateRoute from "./PrivateRoute";
 
 export const router = createBrowserRouter([
  
@@ -42,12 +43,12 @@ export const router = createBrowserRouter([
 },
 {
         path:'/mypets/:id',
-        Component:UpdateMyPets,
+        element:<PrivateRoute><UpdateMyPets></UpdateMyPets></PrivateRoute>,
         loader: ({ params }) => fetch(`http://localhost:3000/pets/${params.id}`)
       },
 {
         path:'/edit-donation/:id',
-        Component:UpdateMyCampaigns,
+        element:<PrivateRoute><UpdateMyCampaigns></UpdateMyCampaigns></PrivateRoute>,
         loader: ({ params }) => fetch(`http://localhost:3000/donationCompaigns/${params.id}`)
       },
  { path: "/pets/:id",
@@ -91,27 +92,27 @@ export const router = createBrowserRouter([
     children:[
       {
         path:'dashboard/addPet',
-        Component:Addpet,
+        element:<PrivateRoute><Addpet></Addpet></PrivateRoute>
       },
       {
         path:'dashboard/mypets',
-        Component:MyPets,
+       element:<PrivateRoute><MyPets></MyPets></PrivateRoute>,
       },
       {
         path:'dashboard/adddonationscampaigns',
-        Component:AddDonationCampaign,
+        element:<PrivateRoute><AddDonationCampaign></AddDonationCampaign></PrivateRoute>,
       },
       {
         path:'dashboard/mydonationcampaign',
-        Component:MyDonationCampaigns,
+        element:<PrivateRoute><MyDonationCampaigns></MyDonationCampaigns></PrivateRoute>,
       },
       {
         path:'dashboard/adoptionrequest',
-        Component:AdoptionRequest,
+        element:<PrivateRoute><AdoptionRequest></AdoptionRequest></PrivateRoute>,
       },
       {
         path:'dashboard/mydonations',
-        Component:MyDonations,
+         element:<PrivateRoute><MyDonations></MyDonations></PrivateRoute>,
       },
       
      

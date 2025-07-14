@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import {
   useReactTable,
   getCoreRowModel,
@@ -11,11 +10,15 @@ import {
 import Modal from "react-modal";
 import { Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
+import useAxiosSecure from "../Hooks/useAxoisSecure";
+ // ✅ added this
 
 Modal.setAppElement("#root");
 
 const MyPets = () => {
   const { user } = useAuth();
+  const axiosSecure = useAxiosSecure(); // ✅ added this instance
+
   const [pets, setPets] = useState([]);
   const [totalPets, setTotalPets] = useState(0);
   const [sorting, setSorting] = useState([]);
@@ -30,8 +33,8 @@ const MyPets = () => {
   // Load paginated pets
   useEffect(() => {
     if (user?.email) {
-      axios
-        .get("http://localhost:3000/mypets", {
+      axiosSecure
+        .get("/mypets", {
           params: {
             email: user.email,
             page: pagination.pageIndex,
@@ -50,11 +53,11 @@ const MyPets = () => {
           setTotalPets(0);
         });
     }
-  }, [user, pagination]);
+  }, [user, pagination, axiosSecure]);
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3000/mypets/${deleteId}`);
+      await axiosSecure.delete(`/mypets/${deleteId}`);
       setPets((prev) => prev.filter((pet) => pet._id !== deleteId));
       setModalIsOpen(false);
     } catch (err) {
@@ -64,7 +67,7 @@ const MyPets = () => {
 
   const handleAdopted = async (id) => {
     try {
-      await axios.patch(`http://localhost:3000/mypets/${id}`, {
+      await axiosSecure.patch(`/mypets/${id}`, {
         adopted: true,
       });
       setPets((prev) =>

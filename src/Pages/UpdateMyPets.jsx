@@ -3,7 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { useNavigate, useLoaderData } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
-
+import useAxiosSecure from "../Hooks/useAxoisSecure";
 const categoryOptions = [
   { value: "Dog", label: "Dog" },
   { value: "Cat", label: "Cat" },
@@ -17,7 +17,7 @@ const UpdateMyPets = () => {
   const navigate = useNavigate();
   const [imageUrl, setImageUrl] = useState(pet.petImage);
   const [uploading, setUploading] = useState(false);
-
+const axiosSecure = useAxiosSecure();
   const {
     register,
     handleSubmit,
@@ -73,7 +73,7 @@ const UpdateMyPets = () => {
     };
 
     try {
-      await axios.put(`http://localhost:3000/pets/${pet._id}`, updatedPet);
+      await axiosSecure.put(`http://localhost:3000/pets/${pet._id}`, updatedPet);
       alert("Pet updated successfully!");
       navigate("/dashboard/dashboard/mypets");
     } catch (err) {

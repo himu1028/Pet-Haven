@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useLoaderData, useNavigate } from "react-router-dom";
-
+import useAxiosSecure from "../Hooks/useAxoisSecure";
 const UpdateMyCampaigns = () => {
+  const axiosSecure = useAxiosSecure();
   const campaign = useLoaderData(); // loader die data ashbe
   const navigate = useNavigate();
   const [imageUrl, setImageUrl] = useState(campaign.petImage);
@@ -57,7 +58,7 @@ console.log(campaign)
         createdAt: new Date().toISOString(),
       };
 
-      await axios.put(
+      await axiosSecure.put(
         `http://localhost:3000/donationCompaigns/${campaign._id}`,
         updatedData
       );
