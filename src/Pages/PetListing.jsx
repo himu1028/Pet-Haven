@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import { usePets } from '../Hooks/usePets';
+import SkeletonCard from '../../Component/SkeletonCard';
+ // ekhane import kore nilam
 
 const PetListing = () => {
   const [search, setSearch] = useState('');
@@ -57,6 +59,10 @@ const PetListing = () => {
 
       {/* 🐾 Pets Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {status === 'loading' &&
+          // Loading state te 6 ta skeleton card dekhabe
+          Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
+
         {data?.pages?.map((page) =>
           page?.pets?.map((pet) => (
             <div key={pet._id} className="bg-white rounded shadow p-4">
@@ -79,6 +85,10 @@ const PetListing = () => {
             </div>
           ))
         )}
+
+        {isFetchingNextPage &&
+          // Next page load korar somoy 3 ta skeleton card dekhabe
+          Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={`loading-${i}`} />)}
       </div>
 
       {/* Infinite Scroll Loader Ref */}

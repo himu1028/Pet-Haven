@@ -1,57 +1,56 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import useAuth from '../Hooks/useAuth';
 import useAxiosSecure from "../Hooks/useAxoisSecure";
+import SkeletonTableRow from '../../Component/SkeletonTableRow';
+
+
 const AdoptionRequest = () => {
   const { user } = useAuth();
   const [requests, setRequests] = useState([]);
-const axiosSecure = useAxiosSecure();
+  const [loading, setLoading] = useState(true); // 🔸 loading state
+  const axiosSecure = useAxiosSecure();
+
   useEffect(() => {
     if (user?.email) {
       axiosSecure
         .get(`http://localhost:3000/adoption-requests?email=${user.email}`)
-        .then((res) => setRequests(res.data))
-        .catch((err) => console.log(err));
+        .then((res) => {
+          setRequests(res.data);
+          setLoading(false); // ✅ loading off
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoading(false); // error holeo loading off
+        });
     }
   }, [user]);
 
   const handleAction = async (petId, requestId) => {
-    console.log("Trying to update pet with ID:", petId);
-    console.log("Trying to update adoption request ID:", requestId);
-
     try {
-      // 1. Update pet status
       await axiosSecure.patch(`http://localhost:3000/pets/${petId}`, {
         adopted: true
       });
 
-      // 2. Update adoption request status
       await axiosSecure.patch(`http://localhost:3000/adoption-requests/${requestId}`, {
         status: "Adopted Confirm"
       });
 
-      // 3. Update UI
       setRequests((prev) =>
         prev.map((r) =>
           r._id === requestId ? { ...r, status: "Adopted Confirm" } : r
         )
       );
-
-      console.log("✅ Update success");
     } catch (error) {
-      console.error("❌ Update failed:", error);
+      console.error("Update failed:", error);
     }
   };
 
   const handleReject = async (requestId) => {
-    console.log("Deleting request ID:", requestId);
     try {
       await axiosSecure.delete(`http://localhost:3000/adoption-requests/${requestId}`);
-      console.log("❌ Rejected and deleted");
-
       setRequests((prev) => prev.filter((r) => r._id !== requestId));
     } catch (error) {
-      console.error("🚫 Reject failed:", error);
+      console.error("Reject failed:", error);
     }
   };
 
@@ -74,47 +73,49 @@ const axiosSecure = useAxiosSecure();
             </tr>
           </thead>
           <tbody>
-            {requests.map((req, index) => (
-              <tr key={req._id}>
-                <td className="p-2 border">{index + 1}</td>
-                <td className="p-2 border">{req.petName}</td>
-                <td className="p-2 border">
-                  <img
-                    src={req.petImage}
-                    alt="pet"
-                    className="w-16 h-16 object-cover rounded"
-                  />
-                </td>
-                <td className="p-2 border">{req.adopterName}</td>
-                <td className="p-2 border">{req.email}</td>
-                <td className="p-2 border">{req.phone}</td>
-                <td className="p-2 border">{req.address}</td>
-                <td className="p-2 border font-semibold text-blue-600">
-                  {req.status || "Pending"}
-                </td>
-                <td className="p-2 border space-x-2">
-                  <button
-                    className="px-2 py-1 bg-green-500 text-white rounded"
-                    onClick={() => handleAction(req.petId, req._id)}
-                  >
-                    Accept
-                  </button>
-                  <button
-                    className="px-2 py-1 bg-red-500 text-white rounded"
-                    onClick={() => handleReject(req._id)}
-                  >
-                    Reject
-                  </button>
-                </td>
-              </tr>
-            ))}
-
-            {requests.length === 0 && (
+            {loading ? (
+              [...Array(5)].map((_, index) => <SkeletonTableRow key={index} />)
+            ) : requests.length === 0 ? (
               <tr>
                 <td className="p-4 text-center border" colSpan="9">
                   No adoption requests found for your pets.
                 </td>
               </tr>
+            ) : (
+              requests.map((req, index) => (
+                <tr key={req._id}>
+                  <td className="p-2 border">{index + 1}</td>
+                  <td className="p-2 border">{req.petName}</td>
+                  <td className="p-2 border">
+                    <img
+                      src={req.petImage}
+                      alt="pet"
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                  </td>
+                  <td className="p-2 border">{req.adopterName}</td>
+                  <td className="p-2 border">{req.email}</td>
+                  <td className="p-2 border">{req.phone}</td>
+                  <td className="p-2 border">{req.address}</td>
+                  <td className="p-2 border font-semibold text-blue-600">
+                    {req.status || "Pending"}
+                  </td>
+                  <td className="p-2 border space-x-2">
+                    <button
+                      className="px-2 py-1 bg-green-500 text-white rounded"
+                      onClick={() => handleAction(req.petId, req._id)}
+                    >
+                      Accept
+                    </button>
+                    <button
+                      className="px-2 py-1 bg-red-500 text-white rounded"
+                      onClick={() => handleReject(req._id)}
+                    >
+                      Reject
+                    </button>
+                  </td>
+                </tr>
+              ))
             )}
           </tbody>
         </table>

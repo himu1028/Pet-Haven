@@ -11,6 +11,7 @@ import { router } from './Routes/router.jsx';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import AuthProvider from './AuthContext/AuthProvider.jsx';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 import {
   QueryClient,

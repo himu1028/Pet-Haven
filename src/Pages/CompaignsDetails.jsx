@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import RecommendedDonations from './RecommendedDonations';
 import { loadStripe } from '@stripe/stripe-js';
@@ -11,6 +11,8 @@ import {
 import axios from 'axios';
 import useAuth from '../Hooks/useAuth';
 import Swal from 'sweetalert2';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 // Load Stripe publishable key from env
 const stripePromise = loadStripe(import.meta.env.VITE_stripe_key);
@@ -84,11 +86,22 @@ const CheckoutForm = ({ amount, email, donation, onClose }) => {
 };
 
 const CompaignsDetails = () => {
-  const donation = useLoaderData();
+  const initialDonation = useLoaderData();
   const { user } = useAuth();
 
+  const [donation, setDonation] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState('');
+
+  useEffect(() => {
+    // Simulate loading delay OR if you want to re-fetch, do here
+    // But since useLoaderData returns data immediately, just simulate small delay
+    setTimeout(() => {
+      setDonation(initialDonation);
+      setLoading(false);
+    }, 800);
+  }, [initialDonation]);
 
   // ✅ Check paused status before opening modal
   const handleDonateClick = () => {
@@ -100,11 +113,22 @@ const CompaignsDetails = () => {
         confirmButtonText: "OK",
       });
     }
-
     setShowModal(true);
   };
 
   const handleCloseModal = () => setShowModal(false);
+
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto p-6">
+        <Skeleton height={320} className="mb-4 rounded-lg" />
+        <Skeleton height={40} width={250} className="mb-3" />
+        <Skeleton height={24} width={200} className="mb-2" />
+        <Skeleton count={3} />
+        <Skeleton height={40} width={150} className="mt-4" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto p-6">

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../Hooks/useAuth';
 import Swal from 'sweetalert2';
 import axios from 'axios';
@@ -11,70 +11,83 @@ const Register = () => {
   const navigate = useNavigate();
   const { createUser, googleSignIn, loginWithgithub } = useAuth();
   const { register, handleSubmit, formState: { errors } } = useForm();
-
   const imageHostKey = import.meta.env.VITE_image_upload_key;
 
-  // Handle GitHub
-  const handleGithub = () => {
-    loginWithgithub()
-      .then(result => {
-        navigate("/");
-        console.log(result);
-      })
-      .catch(error => {
-        console.log(error);
-      });
+  // 🔁 Reusable function: Save user to DB if not exists
+  const saveUserIfNotExists = async (user) => {
+    const userData = {
+      name: user.displayName || "No Name",
+      email: user.email,
+      role: 'user',
+      image: user.photoURL || '',
+      createdAt: new Date()
+    };
+
+    try {
+      const res = await axios.get(`http://localhost:3000/users/${user.email}`);
+      if (!res.data?.email) {
+        await axios.post("http://localhost:3000/users", userData);
+      }
+    } catch (error) {
+      console.error("DB Save Error:", error);
+    }
   };
 
-  // Handle Google
+  // ✅ Handle Google Login
   const handleGoogle = () => {
     googleSignIn()
-      .then(result => {
-        console.log(result);
+      .then(async result => {
+        const user = result.user;
+        await saveUserIfNotExists(user);
         navigate("/");
       })
-      .catch(error => {
-        console.log(error);
-      });
+      .catch(error => console.error(error));
   };
 
-  // Handle Form Submit
+  // ✅ Handle GitHub Login
+  const handleGithub = () => {
+    loginWithgithub()
+      .then(async result => {
+        const user = result.user;
+        await saveUserIfNotExists(user);
+        navigate("/");
+      })
+      .catch(error => console.error(error));
+  };
+
+  // ✅ Handle Register Form Submit
   const onSubmit = async (data) => {
     try {
-      // 1. Upload image to imgbb
-      const imageFile = { image: data.image[0] };
+      // 1. Image upload to imgbb
       const formData = new FormData();
-      formData.append("image", imageFile.image);
-
+      formData.append("image", data.image[0]);
       const imageRes = await axios.post(
         `https://api.imgbb.com/1/upload?key=${imageHostKey}`,
         formData
       );
-
       const imageUrl = imageRes.data.data.url;
 
-      // 2. Create user in Firebase
+      // 2. Create Firebase user
       const userCredential = await createUser(data.email, data.password);
       const user = userCredential.user;
 
-      // 3. Update Firebase profile with name + image
+      // 3. Update profile
       await updateProfile(auth.currentUser, {
         displayName: data.name,
         photoURL: imageUrl
       });
 
-      // 4. Save user info to MongoDB
+      // 4. Save user to DB
       const userData = {
         name: data.name,
         email: data.email,
         role: 'user',
         image: imageUrl,
-        createdAt: new Date(),
+        createdAt: new Date()
       };
+      await axios.post("http://localhost:3000/users", userData);
 
-      await axios.post("http://localhost:3000/users", userData); 
-
-      // 5. Success alert
+      // 5. Alert + Navigate
       Swal.fire({
         position: "top-end",
         icon: "success",
@@ -83,7 +96,6 @@ const Register = () => {
         timer: 1500,
         timerProgressBar: true,
       });
-
       navigate("/");
 
     } catch (error) {
@@ -94,11 +106,10 @@ const Register = () => {
 
   return (
     <div className='max-w-8xl'>
-      <div className="p-10 ">
+      <div className="p-10">
         <h2 className="text-3xl font-bold text-center text-pink-500 mb-6">Please Register</h2>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
           {/* Name */}
           <div>
             <label className="block mb-1 text-sm font-medium text-gray-600">Your Name *</label>
@@ -108,8 +119,8 @@ const Register = () => {
               placeholder="Enter your full name"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
+            {errors.name && <p className='text-red-500'>Name is required</p>}
           </div>
-          {errors.name?.type === 'required' && <p className='text-red-500'>Name is required</p>}
 
           {/* Email */}
           <div>
@@ -120,8 +131,8 @@ const Register = () => {
               placeholder="Enter your email"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
+            {errors.email && <p className='text-red-500'>Email is required</p>}
           </div>
-          {errors.email?.type === 'required' && <p className='text-red-500'>Email is required</p>}
 
           {/* Password */}
           <div>
@@ -132,9 +143,9 @@ const Register = () => {
               placeholder="Enter your password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
             />
+            {errors.password?.type === 'required' && <p className='text-red-500'>Password is required</p>}
+            {errors.password?.type === 'minLength' && <p className='text-red-500'>Minimum 6 characters</p>}
           </div>
-          {errors.password?.type === 'required' && <p className='text-red-500'>Password is required</p>}
-          {errors.password?.type === 'minLength' && <p className='text-red-500'>Password must be 6 characters long</p>}
 
           {/* Image Upload */}
           <div>
@@ -145,10 +156,10 @@ const Register = () => {
               {...register("image", { required: true })}
               className="w-full"
             />
+            {errors.image && <p className='text-red-500'>Image is required</p>}
           </div>
-          {errors.image?.type === 'required' && <p className='text-red-500'>Image is required</p>}
 
-          {/* Submit */}
+          {/* Submit Button */}
           <button
             type="submit"
             className="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-800 transition"
@@ -164,7 +175,7 @@ const Register = () => {
           <div className="flex-grow border-t border-gray-300"></div>
         </div>
 
-        {/* Google Login Button */}
+        {/* Social Login */}
         <button
           type="button"
           onClick={handleGoogle}
@@ -174,17 +185,16 @@ const Register = () => {
           <span className="text-sm font-medium text-gray-700">Continue with Google</span>
         </button>
 
-        {/* GitHub Login Button */}
         <button
           type="button"
           onClick={handleGithub}
           className="w-full flex items-center justify-center gap-3 border border-gray-300 py-2 rounded-lg hover:bg-gray-100 transition mt-2"
         >
           <img src="https://www.svgrepo.com/show/512317/github-142.svg" alt="GitHub" className="h-5 w-5" />
-          <span className="text-sm font-medium text-gray-700">Continue with Github</span>
+          <span className="text-sm font-medium text-gray-700">Continue with GitHub</span>
         </button>
 
-        <p className="mt-6 text-center text-sm ">
+        <p className="mt-6 text-center text-sm">
           Already Register?{" "}
           <Link to="/login" className="text-blue-600 font-semibold hover:underline">
             Please Login

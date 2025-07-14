@@ -11,28 +11,30 @@ import Modal from "react-modal";
 import { Link } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import useAxiosSecure from "../Hooks/useAxoisSecure";
- // ✅ added this
+import SkeletonTableRow from "../../Component/SkeletonTableRow";
+
 
 Modal.setAppElement("#root");
 
 const MyPets = () => {
   const { user } = useAuth();
-  const axiosSecure = useAxiosSecure(); // ✅ added this instance
+  const axiosSecure = useAxiosSecure();
 
   const [pets, setPets] = useState([]);
   const [totalPets, setTotalPets] = useState(0);
   const [sorting, setSorting] = useState([]);
   const [deleteId, setDeleteId] = useState(null);
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [pagination, setPagination] = useState({
     pageIndex: 0,
     pageSize: 10,
   });
 
-  // Load paginated pets
   useEffect(() => {
     if (user?.email) {
+      setLoading(true);
       axiosSecure
         .get("/mypets", {
           params: {
@@ -46,11 +48,13 @@ const MyPets = () => {
           const totalCount = res.data?.total || 0;
           setPets(petData);
           setTotalPets(totalCount);
+          setLoading(false);
         })
         .catch((err) => {
           console.error("Error loading pets", err);
           setPets([]);
           setTotalPets(0);
+          setLoading(false);
         });
     }
   }, [user, pagination, axiosSecure]);
@@ -192,21 +196,27 @@ const MyPets = () => {
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr key={row.id} className="border-t">
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-2 border">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
-              </tr>
-            ))}
+            {loading ? (
+              [...Array(pagination.pageSize)].map((_, idx) => (
+                <SkeletonTableRow key={idx} />
+              ))
+            ) : (
+              table.getRowModel().rows.map((row) => (
+                <tr key={row.id} className="border-t">
+                  {row.getVisibleCells().map((cell) => (
+                    <td key={cell.id} className="px-4 py-2 border">
+                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
 
       {/* Pagination */}
-      {totalPets > 10 && (
+      {totalPets > pagination.pageSize && (
         <div className="flex justify-center items-center gap-4 mt-6">
           <button
             onClick={() => table.previousPage()}
@@ -229,7 +239,7 @@ const MyPets = () => {
         </div>
       )}
 
-      {/* Delete Modal */}
+      {/* Delete Confirmation Modal */}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
