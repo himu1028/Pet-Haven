@@ -4,6 +4,9 @@ import { useNavigate, useLoaderData } from "react-router-dom";
 import axios from "axios";
 import Select from "react-select";
 import useAxiosSecure from "../Hooks/useAxoisSecure";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
 const categoryOptions = [
   { value: "Dog", label: "Dog" },
   { value: "Cat", label: "Cat" },
@@ -13,11 +16,12 @@ const categoryOptions = [
 ];
 
 const UpdateMyPets = () => {
-  const pet = useLoaderData(); // 🧠 loaded data
+  const pet = useLoaderData();
   const navigate = useNavigate();
+  const axiosSecure = useAxiosSecure();
   const [imageUrl, setImageUrl] = useState(pet.petImage);
   const [uploading, setUploading] = useState(false);
-const axiosSecure = useAxiosSecure();
+
   const {
     register,
     handleSubmit,
@@ -30,7 +34,10 @@ const axiosSecure = useAxiosSecure();
       petLocation: pet.petLocation,
       shortDescription: pet.shortDescription,
       longDescription: pet.longDescription,
-      petCategory: pet.petCategory,
+      petCategory:
+        typeof pet.petCategory === "object"
+          ? pet.petCategory
+          : { value: pet.petCategory, label: pet.petCategory },
     },
   });
 
@@ -38,12 +45,13 @@ const axiosSecure = useAxiosSecure();
     const file = e.target.files[0];
     if (!file) return;
     setUploading(true);
+
     const formData = new FormData();
     formData.append("image", file);
 
     try {
       const res = await axios.post(
-        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`, // 🔑 change this
+        `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_upload_key}`,
         formData
       );
       setImageUrl(res.data.data.url);
@@ -64,7 +72,7 @@ const axiosSecure = useAxiosSecure();
       petImage: imageUrl,
       petName: data.petName,
       petAge: data.petAge,
-      petCategory: data.petCategory,
+      petCategory: data.petCategory?.value || "",
       petLocation: data.petLocation,
       shortDescription: data.shortDescription,
       longDescription: data.longDescription,
@@ -98,14 +106,21 @@ const axiosSecure = useAxiosSecure();
         {/* Pet Name */}
         <div>
           <label className="block font-medium">Pet Name</label>
-          <input {...register("petName", { required: "Pet name is required" })} className="input w-full" />
+          <input
+            {...register("petName", { required: "Pet name is required" })}
+            className="input w-full"
+          />
           {errors.petName && <p className="text-red-500 text-sm">{errors.petName.message}</p>}
         </div>
 
         {/* Pet Age */}
         <div>
           <label className="block font-medium">Pet Age</label>
-          <input type="number" {...register("petAge", { required: "Pet age is required" })} className="input w-full" />
+          <input
+            type="number"
+            {...register("petAge", { required: "Pet age is required" })}
+            className="input w-full"
+          />
           {errors.petAge && <p className="text-red-500 text-sm">{errors.petAge.message}</p>}
         </div>
 
@@ -116,35 +131,74 @@ const axiosSecure = useAxiosSecure();
             name="petCategory"
             control={control}
             rules={{ required: "Category is required" }}
-            render={({ field }) => <Select {...field} options={categoryOptions} />}
+            render={({ field }) => (
+              <Select
+                {...field}
+                options={categoryOptions}
+                onChange={(selected) => field.onChange(selected)}
+              />
+            )}
           />
-          {errors.petCategory && <p className="text-red-500 text-sm">{errors.petCategory.message}</p>}
+          {errors.petCategory && (
+            <p className="text-red-500 text-sm">{errors.petCategory.message}</p>
+          )}
         </div>
 
         {/* Location */}
         <div>
           <label className="block font-medium">Pickup Location</label>
-          <input {...register("petLocation", { required: "Location is required" })} className="input w-full" />
-          {errors.petLocation && <p className="text-red-500 text-sm">{errors.petLocation.message}</p>}
+          <input
+            {...register("petLocation", { required: "Location is required" })}
+            className="input w-full"
+          />
+          {errors.petLocation && (
+            <p className="text-red-500 text-sm">{errors.petLocation.message}</p>
+          )}
         </div>
 
         {/* Short Description */}
         <div>
           <label className="block font-medium">Short Description</label>
-          <input {...register("shortDescription", { required: "Short description is required" })} className="input w-full" />
-          {errors.shortDescription && <p className="text-red-500 text-sm">{errors.shortDescription.message}</p>}
+          <input
+            {...register("shortDescription", {
+              required: "Short description is required",
+            })}
+            className="input w-full"
+          />
+          {errors.shortDescription && (
+            <p className="text-red-500 text-sm">{errors.shortDescription.message}</p>
+          )}
         </div>
 
-        {/* Long Description */}
+        {/* Long Description (ReactQuill) */}
         <div>
           <label className="block font-medium">Long Description</label>
-          <textarea {...register("longDescription", { required: "Long description is required" })} className="input w-full h-28" />
-          {errors.longDescription && <p className="text-red-500 text-sm">{errors.longDescription.message}</p>}
+          <Controller
+            name="longDescription"
+            control={control}
+            rules={{ required: "Long description is required" }}
+            render={({ field }) => (
+              <ReactQuill
+                theme="snow"
+                value={field.value || ""}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                placeholder="Write long description..."
+                className="bg-white"
+              />
+            )}
+          />
+          {errors.longDescription && (
+            <p className="text-red-500 text-sm">{errors.longDescription.message}</p>
+          )}
         </div>
 
-        {/* Submit Button */}
+        {/* Submit */}
         <div>
-          <button type="submit" className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+          >
             Update Pet
           </button>
         </div>

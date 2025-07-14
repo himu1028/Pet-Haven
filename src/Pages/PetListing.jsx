@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router';
+import React, { useState, useEffect } from 'react';
+
+import { useInView } from 'react-intersection-observer';
+import { Link } from 'react-router-dom';
+import { usePets } from '../Hooks/usePets';
 
 const PetListing = () => {
-  const [pets, setPets] = useState([]);
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('');
 
-  console.log(pets);
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  } = usePets(search, category);
 
-  const fetchPets = async () => {
-    const res = await axios.get('http://localhost:3000/pets', {
-      params: { search, category },
-    });
-    setPets(res.data);
-  };
+  const { ref, inView } = useInView();
 
   useEffect(() => {
-    fetchPets();
-  }, [search, category]);
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
 
   const categories = ['', 'Dog', 'Cat', 'Rabbit', 'Fish', 'Bird'];
 
@@ -53,26 +57,33 @@ const PetListing = () => {
 
       {/* 🐾 Pets Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {pets.map((pet) => (
-          <div key={pet._id} className="bg-white rounded shadow p-4">
-            <img
-              src={pet.petImage}
-              alt={pet.petName}
-              className="w-full h-48 object-cover rounded"
-            />
-            <h3 className="text-xl font-semibold mt-3">{pet.petName}</h3>
-            <p className="text-sm text-gray-600">Age: {pet.petAge}</p>
-            <p className="text-sm text-gray-600 mb-3">
-              Location: {pet.petLocation}
-            </p>
-            <Link
-              to={`/pets/${pet._id}`}
-              className="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-              View Details
-            </Link>
-          </div>
-        ))}
+        {data?.pages?.map((page) =>
+          page?.pets?.map((pet) => (
+            <div key={pet._id} className="bg-white rounded shadow p-4">
+              <img
+                src={pet.petImage}
+                alt={pet.petName}
+                className="w-full h-48 object-cover rounded"
+              />
+              <h3 className="text-xl font-semibold mt-3">{pet.petName}</h3>
+              <p className="text-sm text-gray-600">Age: {pet.petAge}</p>
+              <p className="text-sm text-gray-600 mb-3">
+                Location: {pet.petLocation}
+              </p>
+              <Link
+                to={`/pets/${pet._id}`}
+                className="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+              >
+                View Details
+              </Link>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Infinite Scroll Loader Ref */}
+      <div ref={ref} className="text-center mt-6">
+        {isFetchingNextPage && <p>Loading more pets...</p>}
       </div>
     </div>
   );
