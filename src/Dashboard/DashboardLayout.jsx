@@ -38,6 +38,36 @@ const DashboardLayout = () => {
             {item.name}
           </Link>
         ))}
+
+
+{/* admin related */}
+        <div>
+          <Link
+            
+            to={"dashboard/allusers"}
+            className={`block font-semibold py-2 px-4 rounded hover:bg-gray-700`}
+          >
+           All Users
+          </Link>
+        </div>
+        <div>
+          <Link
+            
+            to={"dashboard/allpetts"}
+            className={`block font-semibold py-2 px-4 rounded hover:bg-gray-700`}
+          >
+           All Pets
+          </Link>
+        </div>
+        <div>
+          <Link
+            
+            to={"dashboard/alldonationcampaigns"}
+            className={`block font-semibold py-2 px-4 rounded hover:bg-gray-700`}
+          >
+           All Donation Campaigns
+          </Link>
+        </div>
       </div>
 
       {/* Content Area */}

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../Hooks/useAxoisSecure";
-const UpdateMyCampaigns = () => {
+const EditCampaigns = () => {
   const axiosSecure = useAxiosSecure();
   const campaign = useLoaderData(); // loader die data ashbe
   const navigate = useNavigate();
@@ -59,12 +59,12 @@ console.log(campaign)
       };
 
       await axiosSecure.put(
-        `http://localhost:3000/donationCompaigns/${campaign._id}`,
+        `http://localhost:3000/admindonationCompaigns/${campaign._id}`,
         updatedData
       );
 
       alert("Campaign updated successfully!");
-    navigate("/dashboard/dashboard/mydonationcampaign");
+    navigate("/dashboard/dashboard/alldonationcampaigns");
     } catch (error) {
       console.error("Update failed:", error);
       alert("Something went wrong");
@@ -182,4 +182,4 @@ console.log(campaign)
   );
 };
 
-export default UpdateMyCampaigns;
+export default EditCampaigns;

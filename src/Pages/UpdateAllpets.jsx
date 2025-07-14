@@ -81,9 +81,9 @@ const UpdateMyPets = () => {
     };
 
     try {
-      await axiosSecure.put(`http://localhost:3000/pets/${pet._id}`, updatedPet);
+      await axiosSecure.put(`http://localhost:3000/allpets/${pet._id}`, updatedPet);
       alert("Pet updated successfully!");
-      navigate("/dashboard/dashboard/mypets");
+      navigate("/dashboard/dashboard/allpetts");
     } catch (err) {
       console.error("Update failed", err);
       alert("Something went wrong while updating pet");

@@ -87,7 +87,7 @@ const Addpet = () => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-gray-300 rounded">
+    <div className="max-w-4xl mx-auto p-6 bg-gray-300 rounded">
       <h2 className="text-2xl font-bold mb-4 text-center">Add a New Pet</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
