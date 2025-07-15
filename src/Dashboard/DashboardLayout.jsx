@@ -1,9 +1,12 @@
 import React from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import Navbar from '../Pages/Navbar';
+import useUserRole from '../Hooks/useUserRole';
 
 const DashboardLayout = () => {
   const location = useLocation();
+  const { role, roleLoading } = useUserRole();
+  console.log(role);
 
   const menuItems = [
     { name: 'Home', path: '/dashboard' },
@@ -16,70 +19,68 @@ const DashboardLayout = () => {
   ];
 
   return (
-    
     <>
-<div>
-    <Navbar></Navbar>
-</div>
-
-
-    <div className="min-h-screen max-w-8xl py-2 mx-auto flex flex-col md:flex-row">
-      {/* Sidebar */}
-      <div className="bg-gray-800 text-white w-full md:w-64 p-5 space-y-4">
-        <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
-        {menuItems.map((item, index) => (
-          <Link
-            key={index}
-            to={item.path}
-            className={`block font-semibold py-2 px-4 rounded hover:bg-gray-700 ${
-              location.pathname === item.path ? 'bg-gray-700' : ''
-            }`}
-          >
-            {item.name}
-          </Link>
-        ))}
-
-
-{/* admin related */}
-        <div>
-          <Link
-            
-            to={"dashboard/allusers"}
-            className={`block font-semibold py-2 px-4 rounded hover:bg-gray-700`}
-          >
-           All Users
-          </Link>
-        </div>
-        <div>
-          <Link
-            
-            to={"dashboard/allpetts"}
-            className={`block font-semibold py-2 px-4 rounded hover:bg-gray-700`}
-          >
-           All Pets
-          </Link>
-        </div>
-        <div>
-          <Link
-            
-            to={"dashboard/alldonationcampaigns"}
-            className={`block font-semibold py-2 px-4 rounded hover:bg-gray-700`}
-          >
-           All Donation Campaigns
-          </Link>
-        </div>
+      <div>
+        <Navbar />
       </div>
 
-      {/* Content Area */}
-      <div className="flex-1 bg-gray-300 p-6">
-        {/* Default content or Outlet content */}
-        {location.pathname === '/dashboard' ? (
-          <p className="text-xl font-semibold">Welcome to Dashboard</p>
-        ) : (
-          <Outlet />
-        )}
+      <div className="min-h-screen max-w-8xl py-2 mx-auto flex flex-col md:flex-row">
+        {/* Sidebar */}
+        <div className="bg-gray-800 text-white w-full md:w-64 p-5 space-y-4">
+          <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
+
+          {menuItems.map((item, index) => (
+            <Link
+              key={index}
+              to={item.path}
+              className={`block font-semibold py-2 px-4 rounded hover:bg-gray-700 ${
+                location.pathname === item.path ? 'bg-gray-700' : ''
+              }`}
+            >
+              {item.name}
+            </Link>
+          ))}
+
+          {/* Admin Related */}
+          {!roleLoading && role === 'admin' && (
+            <>
+              <div>
+                <Link
+                  to="dashboard/allusers"
+                  className="block font-semibold py-2 px-4 rounded hover:bg-gray-700"
+                >
+                  All Users
+                </Link>
+              </div>
+              <div>
+                <Link
+                  to="dashboard/allpetts"
+                  className="block font-semibold py-2 px-4 rounded hover:bg-gray-700"
+                >
+                  All Pets
+                </Link>
+              </div>
+              <div>
+                <Link
+                  to="dashboard/alldonationcampaigns"
+                  className="block font-semibold py-2 px-4 rounded hover:bg-gray-700"
+                >
+                  All Donation Campaigns
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Content Area */}
+        <div className="flex-1 bg-gray-300 p-6">
+          {location.pathname === '/dashboard' ? (
+            <p className="text-xl font-semibold">Welcome to Dashboard</p>
+          ) : (
+            <Outlet />
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 };

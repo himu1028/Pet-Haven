@@ -7,7 +7,7 @@ import SkeletonTableRow from '../../Component/SkeletonTableRow';
 const AdoptionRequest = () => {
   const { user } = useAuth();
   const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(true); // 🔸 loading state
+  const [loading, setLoading] = useState(true);
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
@@ -16,11 +16,11 @@ const AdoptionRequest = () => {
         .get(`http://localhost:3000/adoption-requests?email=${user.email}`)
         .then((res) => {
           setRequests(res.data);
-          setLoading(false); // ✅ loading off
+          setLoading(false);
         })
         .catch((err) => {
           console.log(err);
-          setLoading(false); // error holeo loading off
+          setLoading(false); 
         });
     }
   }, [user]);

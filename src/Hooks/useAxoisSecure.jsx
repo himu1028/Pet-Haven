@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { useEffect } from 'react';
 import useAuth from './useAuth';
+import { useNavigate } from 'react-router';
 
 const axiosSecure = axios.create({
   baseURL: 'http://localhost:3000',
@@ -8,8 +9,8 @@ const axiosSecure = axios.create({
 });
 
 const useAxiosSecure = () => {
-  const { user } = useAuth();
-
+  const { user,signOutUser } = useAuth();
+const navigate = useNavigate();
   useEffect(() => {
     const addToken = async (config) => {
       if (user) {
@@ -30,6 +31,25 @@ const useAxiosSecure = () => {
     };
   }, [user]);
 
+
+
+   axiosSecure.interceptors.response.use(res => {
+        return res;
+    }, error => {
+        const status = error.status;
+        if (status === 403) {
+            navigate('/dashboard');
+        }
+        else if (status === 401) {
+            signOutUser()
+                .then(() => {
+                     navigate('/login')
+                })
+                .catch(() => { })
+        }
+
+        return Promise.reject(error);
+    })
   return axiosSecure;
 };
 

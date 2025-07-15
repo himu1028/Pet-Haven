@@ -5,7 +5,7 @@ import { useLoaderData, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../Hooks/useAxoisSecure";
 const EditCampaigns = () => {
   const axiosSecure = useAxiosSecure();
-  const campaign = useLoaderData(); // loader die data ashbe
+  const campaign = useLoaderData(); 
   const navigate = useNavigate();
   const [imageUrl, setImageUrl] = useState(campaign.petImage);
   const [uploading, setUploading] = useState(false);
@@ -27,7 +27,7 @@ console.log(campaign)
     },
   });
 
-  // 🖼️ Image Upload Handler
+  //Image Upload Handler
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -49,7 +49,7 @@ console.log(campaign)
     }
   };
 
-  // ✅ Form Submit
+  // Form Submit
   const onSubmit = async (data) => {
     try {
       const updatedData = {
@@ -77,7 +77,7 @@ console.log(campaign)
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-        {/* 🐶 Pet Name */}
+        {/*  Pet Name */}
         <div>
           <label className="block font-medium">Pet Name</label>
           <input
@@ -87,7 +87,7 @@ console.log(campaign)
           {errors.petName && <p className="text-red-500">{errors.petName.message}</p>}
         </div>
 
-        {/* 📷 Pet Picture */}
+        {/*  Pet Picture */}
         <div>
           <label className="block font-medium">Pet Picture</label>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
@@ -95,7 +95,7 @@ console.log(campaign)
           {imageUrl && <img src={imageUrl} alt="Pet" className="w-32 mt-2 rounded" />}
         </div>
 
-        {/* 📍 Location */}
+        {/* Location */}
         <div>
           <label className="block font-medium">Pickup Location</label>
           <input
@@ -105,7 +105,7 @@ console.log(campaign)
           {errors.location && <p className="text-red-500">{errors.location.message}</p>}
         </div>
 
-        {/* 🧑 Organizer Name */}
+        {/*  Organizer Name */}
         <div>
           <label className="block font-medium">Organizer Name</label>
           <input
@@ -115,7 +115,7 @@ console.log(campaign)
           {errors.organizerName && <p className="text-red-500">{errors.organizerName.message}</p>}
         </div>
 
-        {/* 📧 Contact Email */}
+        {/*  Contact Email */}
         <div>
           <label className="block font-medium">Contact Email</label>
           <input
@@ -126,7 +126,7 @@ console.log(campaign)
           {errors.contactEmail && <p className="text-red-500">{errors.contactEmail.message}</p>}
         </div>
 
-        {/* 💸 Max Donation Amount */}
+        {/*  Max Donation Amount */}
         <div>
           <label className="block font-medium">Maximum Donation Amount</label>
           <input
@@ -137,7 +137,7 @@ console.log(campaign)
           {errors.maxDonation && <p className="text-red-500">{errors.maxDonation.message}</p>}
         </div>
 
-        {/* 📅 Last Date */}
+        {/*  Last Date */}
         <div>
           <label className="block font-medium">Last Date</label>
           <input
@@ -148,7 +148,7 @@ console.log(campaign)
           {errors.lastDate && <p className="text-red-500">{errors.lastDate.message}</p>}
         </div>
 
-        {/* ✏️ Short Desc */}
+        {/*  Short Desc */}
         <div>
           <label className="block font-medium">Short Description</label>
           <input
@@ -158,7 +158,7 @@ console.log(campaign)
           {errors.shortDesc && <p className="text-red-500">{errors.shortDesc.message}</p>}
         </div>
 
-        {/* 📝 Long Desc */}
+        {/*  Long Desc */}
         <div>
           <label className="block font-medium">Long Description</label>
           <textarea
@@ -168,7 +168,7 @@ console.log(campaign)
           {errors.longDesc && <p className="text-red-500">{errors.longDesc.message}</p>}
         </div>
 
-        {/* ✅ Submit */}
+        {/*  Submit */}
         <div>
           <button
             type="submit"

@@ -7,21 +7,21 @@ import SkeletonTableRow from '../../Component/SkeletonTableRow';
 
 const AllDonations = () => {
   const [campaigns, setCampaigns] = useState([]);
-  const [loading, setLoading] = useState(true); // ✅ loader state
+  const [loading, setLoading] = useState(true); 
   const axiosSecure = useAxiosSecure();
   const navigate = useNavigate();
 
-  // Load all campaigns
+ 
   useEffect(() => {
-    setLoading(true); // ✅ start loading
+    setLoading(true);
     axiosSecure.get('/admindonationCampaigns')
       .then(res => {
         setCampaigns(res.data);
-        setLoading(false); // ✅ end loading
+        setLoading(false);
       })
       .catch(err => {
         console.error(err);
-        setLoading(false); // ✅ error e loading off
+        setLoading(false); 
       });
   }, [axiosSecure]);
 
@@ -80,7 +80,7 @@ const AllDonations = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-100">
             {loading ? (
-              // ✅ show 6 skeleton rows
+              
               Array.from({ length: 6 }).map((_, idx) => (
                 <SkeletonTableRow key={idx} />
               ))

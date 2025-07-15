@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import RecommendedDonations from './RecommendedDonations';
 import { loadStripe } from '@stripe/stripe-js';
+
 import {
   Elements,
   CardElement,
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
-import axios from 'axios';
+
 import useAuth from '../Hooks/useAuth';
 import Swal from 'sweetalert2';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import useAxiosSecure from '../Hooks/useAxoisSecure';
+
 
 // Load Stripe publishable key from env
 const stripePromise = loadStripe(import.meta.env.VITE_stripe_key);
@@ -20,14 +23,19 @@ const stripePromise = loadStripe(import.meta.env.VITE_stripe_key);
 const CheckoutForm = ({ amount, email, donation, onClose }) => {
   const stripe = useStripe();
   const elements = useElements();
-
+const axiosSecure = useAxiosSecure();
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!stripe || !elements) return;
 
+    // Validate amount before payment
+    if (parseInt(amount) > donation.maxDonation) {
+      return Swal.fire("Invalid Amount", `You can't donate more than $${donation.maxDonation}`, "warning");
+    }
+
     try {
       // 1. Create payment intent
-      const res = await axios.post('http://localhost:3000/donatorsS', {
+      const res = await axiosSecure.post('http://localhost:3000/donatorsS', {
         amount: parseInt(amount),
       });
       const clientSecret = res.data.clientSecret;
@@ -55,10 +63,10 @@ const CheckoutForm = ({ amount, email, donation, onClose }) => {
           donatedAt: new Date(),
         };
 
-        await axios.post('http://localhost:3000/donators', donationInfo);
+        await axiosSecure.post('http://localhost:3000/donators', donationInfo);
 
         // 4. Update donatedAmount
-        await axios.patch(`http://localhost:3000/donationCompaigns/${donation._id}`, {
+        await axiosSecure.patch(`http://localhost:3000/donationCompaigns/${donation._id}`, {
           donatedAmount: parseInt(amount),
         });
 
@@ -70,7 +78,7 @@ const CheckoutForm = ({ amount, email, donation, onClose }) => {
       Swal.fire("Error", err.message, "error");
     }
   };
-
+ 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <CardElement className="p-2 border rounded" />
@@ -95,8 +103,6 @@ const CompaignsDetails = () => {
   const [amount, setAmount] = useState('');
 
   useEffect(() => {
-    // Simulate loading delay OR if you want to re-fetch, do here
-    // But since useLoaderData returns data immediately, just simulate small delay
     setTimeout(() => {
       setDonation(initialDonation);
       setLoading(false);
@@ -180,10 +186,10 @@ const CompaignsDetails = () => {
               value={amount}
               onChange={(e) => {
                 const inputAmount = parseInt(e.target.value);
-                if (!isNaN(inputAmount) && inputAmount <= donation.maxDonation) {
+                if (!isNaN(inputAmount)) {
                   setAmount(inputAmount);
                 } else {
-                  Swal.fire("Invalid Amount", `You can't donate more than $${donation.maxDonation}`, "warning");
+                  setAmount('');
                 }
               }}
               className="w-full border border-gray-300 p-2 rounded mb-3"

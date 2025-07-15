@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X } from 'lucide-react';
 import useAuth from '../Hooks/useAuth';
 import Swal from 'sweetalert2';
-import { FaDog } from 'react-icons/fa'; // 🐶 Dog Icon added
+import { FaDog } from 'react-icons/fa';
+
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -33,9 +34,12 @@ const Navbar = () => {
         <div className="text-2xl font-bold text-blue-600 flex items-center space-x-2">
           <Link to="/" className="flex items-center space-x-1">
             <FaDog className="text-pink-500" size={28} />
-            <span className="text-2xl font-bold">Adoption</span>
+            <span className="text-2xl font-bold">Pet Haven</span>
           </Link>
         </div>
+           
+            
+
 
         {/* Desktop Links */}
         <div className="hidden md:flex gap-8">
@@ -69,6 +73,8 @@ const Navbar = () => {
             </div>
           ) : (
             <>
+            
+
               <Link to="/login" className="px-4 py-2 border rounded-md text-sm hover:bg-blue-50">
                 Login
               </Link>
@@ -118,6 +124,7 @@ const Navbar = () => {
               </>
             ) : (
               <>
+            
                 <Link to="/login" className="px-4 py-2 border rounded-md text-sm hover:bg-blue-50">
                   Login
                 </Link>

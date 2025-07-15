@@ -16,7 +16,7 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import {
   QueryClient,
   QueryClientProvider,
-} from '@tanstack/react-query'; // ✅ Import react-query client
+} from '@tanstack/react-query'; 
 
 // ✅ Create QueryClient instance
 const queryClient = new QueryClient();
@@ -42,7 +42,7 @@ AOS.init({
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* ✅ Wrap with QueryClientProvider */}
+    
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <RouterProvider router={router} />

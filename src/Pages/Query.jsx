@@ -10,44 +10,43 @@ const Query = () => {
 
   const accordionData = [
     {
-      title: "What is Flowbite?",
+      title: "What is the objectives ?",
       content: (
         <>
           <p className="mb-2 text-gray-500 dark:text-gray-400">
-            Flowbite is an open-source library of interactive components built on top of Tailwind CSS including buttons, dropdowns, modals, navbars, and more.
+       Pet Haven is created to service the pets and to haven the pets..This is mainly a service based platform.
           </p>
           <p className="text-gray-500 dark:text-gray-400">
-            Check out this guide to learn how to <a href="/docs/getting-started/introduction/" className="text-blue-600 dark:text-blue-500 hover:underline">get started</a> and start developing websites even faster.
+            Connect with us on also <a href="www.facebook.com/pet-haven" className="text-blue-600 dark:text-blue-500 hover:underline"> facebook</a> and enjoy it.
           </p>
         </>
       )
     },
     {
-      title: "Is there a Figma file available?",
+      title: "Is there a donate system available?",
       content: (
         <>
           <p className="mb-2 text-gray-500 dark:text-gray-400">
-            Flowbite is first conceptualized and designed using the Figma software so everything you see has a design equivalent.
+            Yes you can donate for our pets from the pets Details page.
           </p>
           <p className="text-gray-500 dark:text-gray-400">
-            Check out the <a href="https://flowbite.com/figma/" className="text-blue-600 dark:text-blue-500 hover:underline">Figma design system</a>.
+            Check out the  system.
           </p>
         </>
       )
     },
     {
-      title: "What are the differences between Flowbite and Tailwind UI?",
+      title: "How i sign up to here?",
       content: (
         <>
           <p className="mb-2 text-gray-500 dark:text-gray-400">
-            Flowbite is open source under the MIT license, whereas Tailwind UI is a paid product. Flowbite uses small standalone components.
+            Please go to the login page from our navbar up.
           </p>
           <p className="mb-2 text-gray-500 dark:text-gray-400">
             You can use both together in the same project without any issue.
           </p>
           <ul className="ps-5 text-gray-500 list-disc dark:text-gray-400">
-            <li><a href="https://flowbite.com/pro/" className="text-blue-600 dark:text-blue-500 hover:underline">Flowbite Pro</a></li>
-            <li><a href="https://tailwindui.com/" className="text-blue-600 dark:text-blue-500 hover:underline">Tailwind UI</a></li>
+            
           </ul>
         </>
       )

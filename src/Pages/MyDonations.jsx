@@ -16,7 +16,7 @@ const MyDonations = () => {
         .get(`http://localhost:3000/mydonations?email=${user.email}`)
         .then((res) => {
           setDonations(res.data);
-          setLoading(false); // loading off
+          setLoading(false); 
         })
         .catch((err) => {
           console.error("Failed to load donations:", err);

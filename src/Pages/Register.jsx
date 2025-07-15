@@ -13,7 +13,7 @@ const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const imageHostKey = import.meta.env.VITE_image_upload_key;
 
-  // 🔁 Reusable function: Save user to DB if not exists
+  
   const saveUserIfNotExists = async (user) => {
     const userData = {
       name: user.displayName || "No Name",

@@ -95,7 +95,7 @@ const UpdateMyPets = () => {
       <h2 className="text-2xl font-bold mb-4 text-center">Update Pet</h2>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* 🖼 Image Upload */}
+        {/*  Image Upload */}
         <div>
           <label className="block font-medium">Pet Image</label>
           <input type="file" accept="image/*" onChange={handleImageUpload} />

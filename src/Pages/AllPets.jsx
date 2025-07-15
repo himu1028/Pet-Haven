@@ -9,22 +9,22 @@ import { Link } from 'react-router';
 const AllPets = () => {
   const [pets, setPets] = useState([]);
   const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(true); // ✅ loader state
+  const [loading, setLoading] = useState(true);
   const axiosSecure = useAxiosSecure();
 
   // Load all pets
   useEffect(() => {
-    setLoading(true); // start loader
+    setLoading(true); 
     axiosSecure.get('/allpetts')
       .then(res => {
         console.log('🐾 All pets data:', res.data);
         setPets(res.data.pets);
         setTotal(res.data.total);
-        setLoading(false); // stop loader
+        setLoading(false);
       })
       .catch(err => {
         console.error(err);
-        setLoading(false); // stop loader on error
+        setLoading(false); 
       });
   }, [axiosSecure]);
 
@@ -84,7 +84,7 @@ const AllPets = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-100">
             {loading ? (
-              // ✅ Show 6 skeleton rows while loading
+            
               Array.from({ length: 6 }).map((_, i) => <SkeletonTableRow key={i} />)
             ) : pets.length === 0 ? (
               <tr>

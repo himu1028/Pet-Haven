@@ -1,4 +1,4 @@
-// PetDetails.jsx
+
 import React, { useState, useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 import Modal from "react-modal";
@@ -18,7 +18,7 @@ const PetDetails = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // simulate loading delay
+    
     const timer = setTimeout(() => {
       setPet(petData);
       setLoading(false);
@@ -92,25 +92,18 @@ const PetDetails = () => {
               <strong>Age:</strong> {pet.petAge} years
             </p>
             <p>
-              <strong>Category:</strong> {pet.petCategory?.value}
+              <strong>Category:</strong> {pet.petCategory}
             </p>
             <p>
               <strong>Location:</strong> {pet.petLocation}
             </p>
+            
             <p>
-              <strong>Gender:</strong> {pet.gender}
+              <strong>Color:</strong> {pet.color || 'Not given'}
             </p>
+            
             <p>
-              <strong>Color:</strong> {pet.color}
-            </p>
-            <p>
-              <strong>Breed:</strong> {pet.breed}
-            </p>
-            <p>
-              <strong>Size:</strong> {pet.size}
-            </p>
-            <p>
-              <strong>Long Description:</strong> {pet.longDescription}
+              <strong>Long Description:</strong> {pet.longDescription.replace(/<[^>]+>/g,'')}
             </p>
           </div>
           <button

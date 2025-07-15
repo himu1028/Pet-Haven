@@ -4,13 +4,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import useAuth from '../Hooks/useAuth';
 import Swal from 'sweetalert2';
 import axios from 'axios';
+import { signOut } from 'firebase/auth';
+import { auth } from '../Firebase/firebase.init';
+
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const { googleSignIn, SignInUser, loginWithgithub } = useAuth();
   const navigate = useNavigate();
 
-  // ✅ Reusable Function: Save user to DB if not exists
   const saveUserIfNotExists = async (user) => {
     const userData = {
       name: user.displayName || "No Name",
@@ -30,32 +32,47 @@ const Login = () => {
     }
   };
 
-  // ✅ Google Login Handler
-  const handleGoogle = () => {
-    googleSignIn()
-      .then(async (result) => {
-        const user = result.user;
-        await saveUserIfNotExists(user);
-        Swal.fire("Login Successful with Google!");
-        navigate("/");
-      })
-      .catch(error => {
-        console.log(error);
-      });
+ 
+  const handleGoogle = async () => {
+    try {
+      const result = await googleSignIn();
+      const user = result.user;
+      await saveUserIfNotExists(user);
+      Swal.fire("Login Successful with Google!");
+      navigate("/");
+    } catch (error) {
+      if (error.code === "auth/account-exists-with-different-credential") {
+        Swal.fire({
+          icon: "error",
+          title: "Account Exists",
+          text: "This email is already registered with a different login provider. Please try with that provider.",
+        });
+      } else {
+        console.log("Google Sign In Error:", error);
+      }
+    }
   };
 
-  // ✅ GitHub Login Handler
-  const handleGithub = () => {
-    loginWithgithub()
-      .then(async (result) => {
-        const user = result.user;
-        await saveUserIfNotExists(user);
-        Swal.fire("Login Successful with GitHub!");
-        navigate("/");
-      })
-      .catch(error => {
-        console.log(error);
-      });
+
+  const handleGithub = async () => {
+    try {
+      await signOut(auth); 
+      const result = await loginWithgithub();
+      const user = result.user;
+      await saveUserIfNotExists(user);
+      Swal.fire("Login Successful with GitHub!");
+      navigate("/");
+    } catch (error) {
+      if (error.code === "auth/account-exists-with-different-credential") {
+        Swal.fire({
+          icon: "error",
+          title: "Account Exists",
+          text: "This email is already registered with a different login provider. Please try with that provider.",
+        });
+      } else {
+        console.log("GitHub Sign In Error:", error);
+      }
+    }
   };
 
   // ✅ Email/Password Login Submit

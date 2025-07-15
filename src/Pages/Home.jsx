@@ -12,7 +12,7 @@ const Home = () => {
             const location = useLocation();
            
              useEffect(() => {
-               AOS.refresh(); // Every route change, refresh AOS
+               AOS.refresh(); 
              }, [location]);
     return (
         <div className="space-y-10">

@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import { usePets } from '../Hooks/usePets';
 import SkeletonCard from '../../Component/SkeletonCard';
- // ekhane import kore nilam
+
 
 const PetListing = () => {
   const [search, setSearch] = useState('');
@@ -34,7 +34,7 @@ const PetListing = () => {
         Available Pets for Adoption
       </h2>
 
-      {/* 🔍 Search & Filter */}
+      {/*  Search & Filter */}
       <div className="flex flex-col sm:flex-row gap-4 mb-6 justify-center">
         <input
           type="text"
@@ -57,10 +57,10 @@ const PetListing = () => {
         </select>
       </div>
 
-      {/* 🐾 Pets Grid */}
+      {/*  Pets Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {status === 'loading' &&
-          // Loading state te 6 ta skeleton card dekhabe
+          
           Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)}
 
         {data?.pages?.map((page) =>
@@ -87,7 +87,7 @@ const PetListing = () => {
         )}
 
         {isFetchingNextPage &&
-          // Next page load korar somoy 3 ta skeleton card dekhabe
+          
           Array.from({ length: 3 }).map((_, i) => <SkeletonCard key={`loading-${i}`} />)}
       </div>
 

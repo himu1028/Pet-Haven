@@ -26,6 +26,8 @@ import AllPets from "../Pages/AllPets";
 import UpdateAllpets from "../Pages/UpdateAllpets";
 import AllCampaigns from "../Pages/AllCampaigns";
 import EditCampaigns from "../Pages/EditCampaigns";
+import AdminRoute from "./AdminRoute";
+import Contact from "../Pages/Contact";
 
 export const router = createBrowserRouter([
  
@@ -40,6 +42,10 @@ export const router = createBrowserRouter([
 {
     path:'petlisting',
     Component: PetListing
+},
+{
+    path:'contact',
+    Component:Contact
 },
 
 {
@@ -71,11 +77,11 @@ export const router = createBrowserRouter([
     },
     {
 path:'edit-donations/:id',
-element:<EditCampaigns></EditCampaigns>,
+element:<AdminRoute><EditCampaigns></EditCampaigns></AdminRoute>,
      loader: ({ params }) => fetch(`http://localhost:3000/donationCompaigns/${params.id}`)
 },
  { path: "/update-pet/:id",
-      Component:UpdateAllpets,
+      element:<AdminRoute><UpdateAllpets></UpdateAllpets></AdminRoute>,
       loader: ({ params }) => fetch(`http://localhost:3000/pets/${params.id}`)
 
     },
@@ -134,16 +140,17 @@ element:<EditCampaigns></EditCampaigns>,
       },
       {
         path:'dashboard/allusers',
-         element:<AllUsers></AllUsers>,
+         element:<AdminRoute><AllUsers></AllUsers></AdminRoute>,
       },
       {
         path:'dashboard/allpetts',
-         element:<AllPets></AllPets>,
+          element:<AdminRoute><AllPets></AllPets></AdminRoute>,
       },
       {
         path:'dashboard/alldonationcampaigns',
-         element:<AllCampaigns></AllCampaigns>,
+         element:<AdminRoute><AllCampaigns></AllCampaigns></AdminRoute>,
       },
+      
       
 
       

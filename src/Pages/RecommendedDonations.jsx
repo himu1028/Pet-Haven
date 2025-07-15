@@ -20,7 +20,7 @@ console.log(data)
     };
 
     fetchData();
-  }, []); // Empty dependency array means it runs once after component mounts
+  }, []);
 
   if (loading) return <p>Loading...</p>;
  

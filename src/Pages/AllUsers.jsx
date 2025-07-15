@@ -5,7 +5,7 @@ import SkeletonTableRow from "../../Component/SkeletonTableRow";
 
 const AllUsers = () => {
   const [users, setUsers] = useState([]);
-  const [loading, setLoading] = useState(true); // loading state
+  const [loading, setLoading] = useState(true); 
   const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const AllUsers = () => {
       <h2 className="text-3xl font-bold mb-6 text-center">All Users</h2>
 
       {loading ? (
-        // loading state e 6 ta skeleton card show korbe
+        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
             <SkeletonTableRow key={i} />

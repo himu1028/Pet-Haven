@@ -23,7 +23,7 @@ const About = () => {
                   />
                 </div>
           <p className="text-gray-700 mb-3 text-lg">
-            <strong><span className='text-2xl text-pink-500'>Pet </span><span className='text-blue-500'>Adoption</span></strong> is a platform built to help abandoned and rescued animals find loving homes. 
+            <strong><span className='text-2xl text-pink-500'>Pet </span><span className='text-blue-500'>Haven</span></strong> is a platform built to help abandoned and rescued animals find loving homes. 
             Users can browse available pets, view detailed profiles, and connect with shelters or pet owners directly.
           </p>
           <p className="text-gray-700 text-lg">

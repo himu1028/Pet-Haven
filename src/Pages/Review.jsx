@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 
 const Review = () => {
   const handleReview = (e) => {
-    e.preventDefault(); // Prevent page reload
+    e.preventDefault(); 
     Swal.fire("Thank You!");
   };
 

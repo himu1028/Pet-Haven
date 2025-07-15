@@ -15,7 +15,7 @@ const AddDonationCampaign = () => {
     formState: { errors },
   } = useForm();
 
-  // 🖼️ Upload image to imgbb
+  //  Upload image to imgbb
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -37,7 +37,7 @@ const AddDonationCampaign = () => {
     }
   };
 
-  // ✅ Form submit
+  //  Form submit
   const onSubmit = async (data) => {
     if (!imageUrl) {
       alert('Please upload a pet picture');
@@ -76,7 +76,7 @@ const AddDonationCampaign = () => {
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
 
-        {/* 🖼️ Pet Picture */}
+        {/*  Pet Picture */}
         <div>
           <label className="block font-medium">Pet Picture</label>
           <input type="file" accept="image/*" onChange={handleImageUpload} />
@@ -84,7 +84,7 @@ const AddDonationCampaign = () => {
           {imageUrl && <img src={imageUrl} alt="Pet" className="w-32 mt-2 rounded" />}
         </div>
 
-        {/* 🐶 Pet Name */}
+        {/*  Pet Name */}
         <div>
           <label className="block font-medium">Pet Name</label>
           <input
@@ -95,7 +95,7 @@ const AddDonationCampaign = () => {
           {errors.petName && <p className="text-red-500 text-sm">{errors.petName.message}</p>}
         </div>
 
-        {/* 📍 Location */}
+        {/* Location */}
         <div>
           <label className="block font-medium">Location</label>
           <input
@@ -106,7 +106,7 @@ const AddDonationCampaign = () => {
           {errors.location && <p className="text-red-500 text-sm">{errors.location.message}</p>}
         </div>
 
-        {/* 📧 Contact Email */}
+        {/*  Contact Email */}
         <div>
           <label className="block font-medium">Contact Email</label>
           <input
@@ -118,7 +118,7 @@ const AddDonationCampaign = () => {
           {errors.contactEmail && <p className="text-red-500 text-sm">{errors.contactEmail.message}</p>}
         </div>
 
-        {/* 👤 Organizer Name */}
+        {/*  Organizer Name */}
         <div>
           <label className="block font-medium">Organizer Name</label>
           <input
@@ -129,7 +129,7 @@ const AddDonationCampaign = () => {
           {errors.organizer && <p className="text-red-500 text-sm">{errors.organizer.message}</p>}
         </div>
 
-        {/* 💸 Max Donation Amount */}
+        {/*  Max Donation Amount */}
         <div>
           <label className="block font-medium">Maximum Donation Amount</label>
           <input
@@ -141,7 +141,7 @@ const AddDonationCampaign = () => {
           {errors.maxAmount && <p className="text-red-500 text-sm">{errors.maxAmount.message}</p>}
         </div>
 
-        {/* 📅 Last Date */}
+        {/*  Last Date */}
         <div>
           <label className="block font-medium">Last Date of Donation</label>
           <input
@@ -152,7 +152,7 @@ const AddDonationCampaign = () => {
           {errors.lastDate && <p className="text-red-500 text-sm">{errors.lastDate.message}</p>}
         </div>
 
-        {/* 📜 Short Description */}
+        {/*  Short Description */}
         <div>
           <label className="block font-medium">Short Description</label>
           <input
@@ -163,7 +163,7 @@ const AddDonationCampaign = () => {
           {errors.shortDesc && <p className="text-red-500 text-sm">{errors.shortDesc.message}</p>}
         </div>
 
-        {/* 📄 Long Description */}
+        {/*  Long Description */}
         <div>
           <label className="block font-medium">Long Description</label>
           <textarea
@@ -174,7 +174,7 @@ const AddDonationCampaign = () => {
           {errors.longDesc && <p className="text-red-500 text-sm">{errors.longDesc.message}</p>}
         </div>
 
-        {/* 🚀 Submit */}
+        {/*  Submit */}
         <div>
           <button
             type="submit"

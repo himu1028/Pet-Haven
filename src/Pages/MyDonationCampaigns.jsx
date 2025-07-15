@@ -13,7 +13,7 @@ const MyDonationCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [donators, setDonators] = useState([]);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [loading, setLoading] = useState(true); // loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user?.email) {
@@ -21,7 +21,7 @@ const MyDonationCampaigns = () => {
         .get(`/mydonationCompaigns?email=${user.email}`)
         .then((res) => {
           setCampaigns(res.data);
-          setLoading(false); // loading off
+          setLoading(false); 
         });
     }
   }, [user, axiosSecure]);
