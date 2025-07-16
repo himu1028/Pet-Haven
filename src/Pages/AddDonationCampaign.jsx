@@ -60,7 +60,7 @@ const AddDonationCampaign = () => {
     };
 
     try {
-      await axiosSecure.post('http://localhost:3000/donationCompaigns', campaignData);
+      await axiosSecure.post('https://pet-adoption-server-kohl.vercel.app/donationCompaigns', campaignData);
       alert('Donation campaign added successfully!');
       reset();
       setImageUrl('');

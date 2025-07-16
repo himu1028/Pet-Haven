@@ -13,7 +13,7 @@ const AdoptionRequest = () => {
   useEffect(() => {
     if (user?.email) {
       axiosSecure
-        .get(`http://localhost:3000/adoption-requests?email=${user.email}`)
+        .get(`https://pet-adoption-server-kohl.vercel.app/adoption-requests?email=${user.email}`)
         .then((res) => {
           setRequests(res.data);
           setLoading(false);
@@ -27,11 +27,11 @@ const AdoptionRequest = () => {
 
   const handleAction = async (petId, requestId) => {
     try {
-      await axiosSecure.patch(`http://localhost:3000/pets/${petId}`, {
+      await axiosSecure.patch(`https://pet-adoption-server-kohl.vercel.app/pets/${petId}`, {
         adopted: true
       });
 
-      await axiosSecure.patch(`http://localhost:3000/adoption-requests/${requestId}`, {
+      await axiosSecure.patch(`https://pet-adoption-server-kohl.vercel.app/adoption-requests/${requestId}`, {
         status: "Adopted Confirm"
       });
 
@@ -47,7 +47,7 @@ const AdoptionRequest = () => {
 
   const handleReject = async (requestId) => {
     try {
-      await axiosSecure.delete(`http://localhost:3000/adoption-requests/${requestId}`);
+      await axiosSecure.delete(`https://pet-adoption-server-kohl.vercel.app/adoption-requests/${requestId}`);
       setRequests((prev) => prev.filter((r) => r._id !== requestId));
     } catch (error) {
       console.error("Reject failed:", error);
@@ -93,7 +93,7 @@ const AdoptionRequest = () => {
                       className="w-16 h-16 object-cover rounded"
                     />
                   </td>
-                  <td className="p-2 border">{req.adopterName}</td>
+                  <td className="p-2 border">{req.name}</td>
                   <td className="p-2 border">{req.email}</td>
                   <td className="p-2 border">{req.phone}</td>
                   <td className="p-2 border">{req.address}</td>

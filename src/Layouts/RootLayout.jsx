@@ -1,38 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from '../Pages/Navbar';
-
-import AOS from 'aos';
 import MyFooter from '../Pages/MyFooter';
 
 const RootLayout = () => {
-   
-
-    
+ 
 
 
   
 
-    return (
+  return (
+    <>
+      
 
-
-<>
-  
-<div className='bg-gray-300'>
-          <div>
-              <Navbar />
-          </div>
-          <div>
-             <Outlet />
-          </div>
-          <div>
-              <MyFooter />
-          </div>
-        </div>
-</>
-
-        
-    );
+      <div className='bg-gray-300' >
+        <Navbar />
+        <Outlet />
+        <MyFooter />
+      </div>
+    </>
+  );
 };
 
 export default RootLayout;

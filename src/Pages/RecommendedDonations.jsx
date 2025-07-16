@@ -10,7 +10,7 @@ console.log(data)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/recommendDonationCompaigns');
+        const res = await axios.get('https://pet-adoption-server-kohl.vercel.app/recommendDonationCompaigns');
         setData(res.data);
         setLoading(false);
       } catch (err) {

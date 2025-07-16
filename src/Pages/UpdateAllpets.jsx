@@ -6,6 +6,7 @@ import Select from "react-select";
 import useAxiosSecure from "../Hooks/useAxoisSecure";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import Swal from "sweetalert2";
 
 const categoryOptions = [
   { value: "Dog", label: "Dog" },
@@ -81,8 +82,8 @@ const UpdateMyPets = () => {
     };
 
     try {
-      await axiosSecure.put(`http://localhost:3000/allpets/${pet._id}`, updatedPet);
-      alert("Pet updated successfully!");
+      await axiosSecure.put(`https://pet-adoption-server-kohl.vercel.app/allpets/${pet._id}`, updatedPet);
+        Swal.fire("You Have Successfully Updated the pet!");
       navigate("/dashboard/dashboard/allpetts");
     } catch (err) {
       console.error("Update failed", err);

@@ -22,6 +22,7 @@ const stripePromise = loadStripe(import.meta.env.VITE_stripe_key);
 
 const CheckoutForm = ({ amount, email, donation, onClose }) => {
   const stripe = useStripe();
+
   const elements = useElements();
 const axiosSecure = useAxiosSecure();
   const handleSubmit = async (e) => {
@@ -35,7 +36,7 @@ const axiosSecure = useAxiosSecure();
 
     try {
       // 1. Create payment intent
-      const res = await axiosSecure.post('http://localhost:3000/donatorsS', {
+      const res = await axiosSecure.post('https://pet-adoption-server-kohl.vercel.app/donatorsS', {
         amount: parseInt(amount),
       });
       const clientSecret = res.data.clientSecret;
@@ -59,14 +60,16 @@ const axiosSecure = useAxiosSecure();
           donatedFor: donation.petName,
           amount: parseInt(amount),
           email,
+          petImage:donation.petImage,
+
           paymentId: result.paymentIntent.id,
           donatedAt: new Date(),
         };
 
-        await axiosSecure.post('http://localhost:3000/donators', donationInfo);
+        await axiosSecure.post('https://pet-adoption-server-kohl.vercel.app/donators', donationInfo);
 
         // 4. Update donatedAmount
-        await axiosSecure.patch(`http://localhost:3000/donationCompaigns/${donation._id}`, {
+        await axiosSecure.patch(`https://pet-adoption-server-kohl.vercel.app/donationCompaigns/${donation._id}`, {
           donatedAmount: parseInt(amount),
         });
 
@@ -78,7 +81,7 @@ const axiosSecure = useAxiosSecure();
       Swal.fire("Error", err.message, "error");
     }
   };
- 
+  
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <CardElement className="p-2 border rounded" />
@@ -101,7 +104,7 @@ const CompaignsDetails = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [amount, setAmount] = useState('');
-
+ console.log(donation)
   useEffect(() => {
     setTimeout(() => {
       setDonation(initialDonation);

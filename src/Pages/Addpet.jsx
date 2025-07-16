@@ -76,7 +76,7 @@ const Addpet = () => {
     };
 
     try {
-      await axiosSecure.post('http://localhost:3000/pets', petData);
+      await axiosSecure.post('https://pet-adoption-server-kohl.vercel.app/pets', petData);
       alert('Pet added successfully!');
       reset();
       setImageUrl('');

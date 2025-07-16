@@ -1,4 +1,3 @@
-
 import flowbite from 'flowbite/plugin';
 
 /** @type {import('tailwindcss').Config} */

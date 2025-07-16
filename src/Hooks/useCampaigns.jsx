@@ -2,7 +2,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const fetchCampaigns = async ({ pageParam = 1 }) => {
-  const res = await axios.get(`http://localhost:3000/donationCompaigns`, {
+  const res = await axios.get(`https://pet-adoption-server-kohl.vercel.app/donationCompaigns`, {
     params: { page: pageParam, limit: 6 },
   });
   return res.data;

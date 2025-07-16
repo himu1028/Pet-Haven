@@ -42,6 +42,7 @@ const PetDetails = () => {
       petImage: pet.petImage,
       userName: user.displayName,
       email: user.email,
+      name:user.displayName,
       ownerEmail: pet.email,
       phone: data.phone,
       address: data.address,
@@ -49,7 +50,7 @@ const PetDetails = () => {
     };
 
     try {
-      const res = await fetch("http://localhost:3000/adoptions", {
+      const res = await fetch("https://pet-adoption-server-kohl.vercel.app/adoptions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

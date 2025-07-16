@@ -23,9 +23,9 @@ const Login = () => {
     };
 
     try {
-      const res = await axios.get(`http://localhost:3000/users/${user.email}`);
+      const res = await axios.get(`https://pet-adoption-server-kohl.vercel.app/users/${user.email}`);
       if (!res.data?.email) {
-        await axios.post("http://localhost:3000/users", userData);
+        await axios.post("https://pet-adoption-server-kohl.vercel.app/users", userData);
       }
     } catch (err) {
       console.error("User DB Save Error:", err);

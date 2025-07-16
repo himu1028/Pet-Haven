@@ -59,7 +59,7 @@ console.log(campaign)
       };
 
       await axiosSecure.put(
-        `http://localhost:3000/admindonationCompaigns/${campaign._id}`,
+        `https://pet-adoption-server-kohl.vercel.app/admindonationCompaigns/${campaign._id}`,
         updatedData
       );
 

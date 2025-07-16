@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 import { useLoaderData, useNavigate } from "react-router-dom";
 import useAxiosSecure from "../Hooks/useAxoisSecure";
+import Swal from "sweetalert2";
 const UpdateMyCampaigns = () => {
   const axiosSecure = useAxiosSecure();
   const campaign = useLoaderData(); 
@@ -59,11 +60,11 @@ console.log(campaign)
       };
 
       await axiosSecure.put(
-        `http://localhost:3000/donationCompaigns/${campaign._id}`,
+        `https://pet-adoption-server-kohl.vercel.app/donationCompaigns/${campaign._id}`,
         updatedData
       );
 
-      alert("Campaign updated successfully!");
+          Swal.fire("You Have Successfully Updated the Campaign!");
     navigate("/dashboard/dashboard/mydonationcampaign");
     } catch (error) {
       console.error("Update failed:", error);

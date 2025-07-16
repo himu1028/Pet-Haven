@@ -81,7 +81,7 @@ const UpdateMyPets = () => {
     };
 
     try {
-      await axiosSecure.put(`http://localhost:3000/pets/${pet._id}`, updatedPet);
+      await axiosSecure.put(`https://pet-adoption-server-kohl.vercel.app/pets/${pet._id}`, updatedPet);
       alert("Pet updated successfully!");
       navigate("/dashboard/dashboard/mypets");
     } catch (err) {

@@ -55,34 +55,34 @@ export const router = createBrowserRouter([
 {
         path:'/mypets/:id',
         element:<PrivateRoute><UpdateMyPets></UpdateMyPets></PrivateRoute>,
-        loader: ({ params }) => fetch(`http://localhost:3000/pets/${params.id}`)
+        loader: ({ params }) => fetch(`https://pet-adoption-server-kohl.vercel.app/pets/${params.id}`)
       },
 {
         path:'/edit-donation/:id',
         element:<PrivateRoute><UpdateMyCampaigns></UpdateMyCampaigns></PrivateRoute>,
-        loader: ({ params }) => fetch(`http://localhost:3000/donationCompaigns/${params.id}`)
+        loader: ({ params }) => fetch(`https://pet-adoption-server-kohl.vercel.app/donationCompaigns/${params.id}`)
       },
 
 
 
  { path: "/pets/:id",
       Component:PetDetails,
-      loader: ({ params }) => fetch(`http://localhost:3000/pets/${params.id}`)
+      loader: ({ params }) => fetch(`https://pet-adoption-server-kohl.vercel.app/pets/${params.id}`)
 
     },
  { path: "/donationCompaigns/:id",
       Component:CompaignsDetails,
-      loader: ({ params }) => fetch(`http://localhost:3000/donationCompaigns/${params.id}`)
+      loader: ({ params }) => fetch(`https://pet-adoption-server-kohl.vercel.app/donationCompaigns/${params.id}`)
 
     },
     {
 path:'edit-donations/:id',
 element:<AdminRoute><EditCampaigns></EditCampaigns></AdminRoute>,
-     loader: ({ params }) => fetch(`http://localhost:3000/donationCompaigns/${params.id}`)
+     loader: ({ params }) => fetch(`https://pet-adoption-server-kohl.vercel.app/donationCompaigns/${params.id}`)
 },
  { path: "/update-pet/:id",
       element:<AdminRoute><UpdateAllpets></UpdateAllpets></AdminRoute>,
-      loader: ({ params }) => fetch(`http://localhost:3000/pets/${params.id}`)
+      loader: ({ params }) => fetch(`https://pet-adoption-server-kohl.vercel.app/pets/${params.id}`)
 
     },
  { path: "/redonationCompaigns/:id",

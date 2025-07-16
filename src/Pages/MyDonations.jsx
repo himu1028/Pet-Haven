@@ -13,7 +13,7 @@ const MyDonations = () => {
   useEffect(() => {
     if (user?.email) {
       axiosSecure
-        .get(`http://localhost:3000/mydonations?email=${user.email}`)
+        .get(`https://pet-adoption-server-kohl.vercel.app/mydonations?email=${user.email}`)
         .then((res) => {
           setDonations(res.data);
           setLoading(false); 
@@ -30,7 +30,7 @@ const MyDonations = () => {
     if (!confirm) return;
 
     try {
-      await axiosSecure.delete(`http://localhost:3000/donators/${id}`);
+      await axiosSecure.delete(`https://pet-adoption-server-kohl.vercel.app/donators/${id}`);
       setDonations((prev) => prev.filter((d) => d._id !== id));
     } catch (error) {
       console.error("Refund failed:", error);

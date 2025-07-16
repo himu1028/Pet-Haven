@@ -5,7 +5,7 @@ const fetchPets = async ({ pageParam = 1, queryKey }) => {
   const [_key, search, category] = queryKey;
   const limit = 6;
 
-  const res = await axios.get('http://localhost:3000/pets', {
+  const res = await axios.get('https://pet-adoption-server-kohl.vercel.app/pets', {
     params: { page: pageParam, limit, search, category },
   });
 
