@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import { Moon, Sun } from 'lucide-react'; 
 
 const DarkModeToggle = () => {
   const [darkMode, setDarkMode] = useState(() => {
+    // LocalStorage e dark thakle true
     return localStorage.getItem('theme') === 'dark';
   });
 
@@ -15,12 +17,16 @@ const DarkModeToggle = () => {
     }
   }, [darkMode]);
 
+  const toggleTheme = () => {
+    setDarkMode(!darkMode);
+  };
+
   return (
     <button
-      onClick={() => setDarkMode(!darkMode)}
-      className="px-3 py-1 bg-gray-300 dark:bg-gray-700 text-sm text-black dark:text-white rounded-md"
+      onClick={toggleTheme}
+      className="text-xl p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
     >
-      {darkMode ? '🌙 Dark' : '☀️ Light'}
+      {darkMode ? <Sun className="w-5 h-5 text-yellow-400" /> : <Moon className="w-5 h-5 text-gray-800" />}
     </button>
   );
 };

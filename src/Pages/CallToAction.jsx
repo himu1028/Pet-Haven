@@ -6,6 +6,7 @@ const CallToAction = () => {
   return (
     <section className="relative max-w-8xl mx-auto bg-cover bg-center rounded-xl bg-no-repeat h-[400px] md:h-[500px]" style={{ backgroundImage: "url('https://i.ibb.co/pv06KF3H/sad.jpg')" }}>
       {/* Overlay */}
+     
       <div className="absolute inset-0 bg-black/60 flex items-center justify-center px-6">
         <div className="text-center  max-w-2xl">
           <div className="text-2xl md:text-4xl pb-10 text-pink-500 font-bold">

@@ -4,6 +4,7 @@ import { Menu, X } from 'lucide-react';
 import useAuth from '../Hooks/useAuth';
 import Swal from 'sweetalert2';
 import { FaDog } from 'react-icons/fa';
+import DarkModeToggle from '../../Component/DarkModeToggle';
 
 
 const Navbar = () => {
@@ -53,7 +54,7 @@ const Navbar = () => {
             </Link>
           ))}
         </div>
-
+<DarkModeToggle></DarkModeToggle>
         {/* Auth Buttons */}
         <div className="hidden md:flex gap-4 relative">
           {user && user.email ? (

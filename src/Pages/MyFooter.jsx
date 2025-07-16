@@ -1,4 +1,5 @@
 import React from 'react';
+import { FaDog } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const MyFooter = () => {
@@ -7,13 +8,9 @@ const MyFooter = () => {
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-center md:text-left">
         {/* Left: Logo and Web Name */}
         <div className="mb-6 md:mb-0 flex items-center space-x-3">
-          <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            alt="Logo"
-            className="h-8"
-          />
+               <FaDog className="text-pink-500" size={28} /> 
           <span className="text-2xl font-semibold text-white">
-            MyWebsite
+       Pet Haven
           </span>
         </div>
 

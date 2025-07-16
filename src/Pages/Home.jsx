@@ -8,6 +8,7 @@ import Review from './Review';
 import { useLocation } from 'react-router';
 import AOS from 'aos';
 import PetCategories from './PetCategories';
+
 const Home = () => {
             const location = useLocation();
            
@@ -35,6 +36,7 @@ const Home = () => {
       <div data-aos="fade-up">
         <Review />
       </div>
+     
     </div>
     );
 };

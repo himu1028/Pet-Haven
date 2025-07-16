@@ -3,9 +3,12 @@ import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 const Contact = () => {
   return (
+   
     <div className="min-h-screen flex items-center justify-center bg-gray-300 px-4">
       <div className="bg-white rounded-2xl shadow-2xl p-8 md:p-12 max-w-xl w-full text-center space-y-6">
-        <h1 className="text-3xl md:text-4xl font-bold text-gray-800">Contact Us</h1>
+        <h1 className="text-3xl  md:text-4xl font-bold text-gray-800">Contact Us</h1>
+    
+
         <p className="text-gray-600">
           We're here to help. Feel free to reach out to us using the information below.
         </p>
