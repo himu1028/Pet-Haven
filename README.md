@@ -116,9 +116,15 @@
 
 ---
 
-## 👨‍💻 Developer
+## 📚 Resources
 
-Made with ❤️ by Himu
+--React Documentation
+--Tailwind Docs
+--MongoDB Guide
+--Vite docs
+--Firebase docs
+--npm packege docs
 
----
-
+🙋‍♂️ Author
+Abuzar Hasan Himu
+📧 mdabuzarhasanhimu@gmail.com
