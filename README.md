@@ -8,7 +8,7 @@
 
 ## 🌐 Live Site
 
-🔗 [Live URL Here](https://your-live-url.com) <!-- Replace with actual link when ready -->
+🔗 [Live URL Here](https://pet-adoption-d4b8f.web.app)
 
 ---
 
@@ -73,7 +73,7 @@
 
 ---
 
-## ⚙️ Setup & Installation
+## ⚙️ Run locally
 
 1. Clone this repo  
    `git clone https://github.com/your-repo.git`
