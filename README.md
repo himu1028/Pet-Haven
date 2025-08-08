@@ -91,6 +91,16 @@
 
 ---
 
+## 📦 Dependency
+
+--react-router
+--firebase
+--axois
+--tailwind css
+--daisy ui
+--firebase
+--mongodb
+
 ## ⚙️ Run locally
 
 1. Clone this repo  
