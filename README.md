@@ -52,6 +52,19 @@
 
 ---
 
+
+## 🛠 Technology Used
+
+- HTML5
+- CSS3
+- Tailwind CSS
+- JavaScript (ES6+)
+- React.js
+- React Router
+- Firebase Authentication
+- Express.js (if backend used)
+- MongoDB (if backend used)
+
 ## 📦 NPM Packages Used
 
 | Category | Package | Purpose |
