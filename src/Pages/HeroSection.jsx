@@ -15,7 +15,7 @@ const HeroSection = () => {
       description: "Adopt a cat who’s waiting to be loved and pampered."
     },
     {
-      image: "https://i.ibb.co/kgP3gJbK/Golden-Retriever.webp",
+      image: "https://i.ibb.co/v6fQPFBs/dog.jpg",
       title: "Make a Difference Today",
       description: "Your kindness can change a pet’s life forever."
     },
