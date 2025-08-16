@@ -29,10 +29,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-gray-300 max-w-8xl mx-auto shadow-md sticky top-0 z-50">
+    <nav className="bg-gray-300 border-b-2  mx-auto shadow-lg sticky top-0 z-50">
       <div className="max-w-8xl mx-auto px-4 py-3 flex justify-between items-center">
         {/* Logo with Dog Icon */}
-        <div className="text-2xl font-bold text-blue-600 flex items-center space-x-2">
+        <div className="text-2xl font-bold text-blue-600 flex items-center ">
           <Link to="/" className="flex items-center space-x-1">
             <FaDog className="text-pink-500" size={28} />
             <span className="text-2xl font-bold">Pet Haven</span>

@@ -25,7 +25,7 @@ const RootLayout = () => {
 
   return (
     <>
-      {/* Dark Mode Toggle Button */}
+      {/* Dark Mode Toggle Button
       <div className="flex justify-end items-center w-0.5 mx-auto bg-base-100 shadow-sm">
         <button
           onClick={toggleTheme}
@@ -41,7 +41,7 @@ const RootLayout = () => {
             readOnly
           />
         </button>
-      </div>
+      </div> */}
 
       {/* Navbar + Page Content */}
       <div className="bg-gray-300 dark:bg-gray-900">
