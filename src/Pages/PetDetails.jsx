@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { useLoaderData } from "react-router-dom";
 import Modal from "react-modal";
 import { useForm } from "react-hook-form";
 import Swal from "sweetalert2";
 import useAuth from "../Hooks/useAuth";
- import SkeletonCard from '../../Component/SkeletonCard';
+import SkeletonCard from '../../Component/SkeletonCard';
 
 Modal.setAppElement("#root");
 
@@ -18,7 +17,6 @@ const PetDetails = () => {
   const [modalIsOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    
     const timer = setTimeout(() => {
       setPet(petData);
       setLoading(false);
@@ -42,7 +40,7 @@ const PetDetails = () => {
       petImage: pet.petImage,
       userName: user.displayName,
       email: user.email,
-      name:user.displayName,
+      name: user.displayName,
       ownerEmail: pet.email,
       phone: data.phone,
       address: data.address,
@@ -50,13 +48,16 @@ const PetDetails = () => {
     };
 
     try {
-      const res = await fetch("https://pet-adoption-server-kohl.vercel.app/adoptions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(adoptionData),
-      });
+      const res = await fetch(
+        "https://pet-adoption-server-kohl.vercel.app/adoptions",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(adoptionData),
+        }
+      );
 
       const result = await res.json();
 
@@ -92,19 +93,27 @@ const PetDetails = () => {
             <p>
               <strong>Age:</strong> {pet.petAge} years
             </p>
+            
+            {/* ✅ CHANGE HERE */}
             <p>
-              <strong>Category:</strong> {pet.petCategory}
+              <strong>Category:</strong>{" "}
+              {pet.petCategory?.label || pet.petCategory}
             </p>
+            
             <p>
               <strong>Location:</strong> {pet.petLocation}
             </p>
-            
+
             <p>
-              <strong>Color:</strong> {pet.color || 'Not given'}
+              <strong>Color:</strong> {pet.color || "Not given"}
             </p>
-            
+
+            {/* ✅ CHANGE HERE */}
             <p>
-              <strong>Long Description:</strong> {pet.longDescription.replace(/<[^>]+>/g,'')}
+              <strong>Long Description:</strong>{" "}
+              {typeof pet.longDescription === "string"
+                ? pet.longDescription.replace(/<[^>]+>/g, "")
+                : ""}
             </p>
           </div>
           <button

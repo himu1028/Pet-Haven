@@ -1,5 +1,5 @@
 import flowbite from 'flowbite/plugin';
-
+import daisyui from 'daisyui';
 /** @type {import('tailwindcss').Config} */
 export default {
   darkMode: 'class',
@@ -13,6 +13,7 @@ export default {
   },
   plugins: [
     flowbite,
+     daisyui,
      
   ],
 };

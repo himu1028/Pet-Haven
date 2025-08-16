@@ -54,7 +54,7 @@ const Navbar = () => {
             </Link>
           ))}
         </div>
-<DarkModeToggle></DarkModeToggle>
+
         {/* Auth Buttons */}
         <div className="hidden md:flex gap-4 relative">
           {user && user.email ? (
