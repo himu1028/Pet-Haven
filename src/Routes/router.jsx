@@ -28,6 +28,7 @@ import AllCampaigns from "../Pages/AllCampaigns";
 import EditCampaigns from "../Pages/EditCampaigns";
 import AdminRoute from "./AdminRoute";
 import Contact from "../Pages/Contact";
+import NotFound from "../Pages/NotFound";
 
 export const router = createBrowserRouter([
  
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
 {
     path:'petlisting',
     Component: PetListing
+},
+{
+    path:'*',
+    Component: NotFound
 },
 {
     path:'contact',
